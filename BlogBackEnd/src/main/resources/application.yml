@@ -1,0 +1,18 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /api/v1
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  profiles:
+    active: dev
+  application:
+    name: qblog-server
+logging:
+  file:
+    name: log/qblog.log
+    path: log/

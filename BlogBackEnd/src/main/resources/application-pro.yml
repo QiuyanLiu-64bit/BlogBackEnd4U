@@ -1,0 +1,28 @@
+#开发环境的配置文件
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/film_db?serverTimezone=GMT%2B8&useSSL=true
+    username: qiuyan
+    password: Mei23333
+  redis:
+    host: redis
+    port: 6379
+
+minio:
+  server: http://117.50.23.198:8884/
+  access-key: AKIAIOSFODNN7EXAMPLE
+  secret-key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  bucket: qblog
+qiniu:
+  server: http://upload-z2.qiniup.com
+  url: http://images.codingli.xyz/
+  access-key: knQrQNZO7UAIGCmDuXpSt_yeeF2WI_OykM6IITNN
+  secret-key: DYr3LHywS5TdxPuxvcuBsW_3JkfOBnvEkau5Ubvn
+  bucket: qimages-api
+
+setting:
+  path: _qblog/qblog.setting
+
+remote:
+  logUrl: http://182.92.165.175:8004/
