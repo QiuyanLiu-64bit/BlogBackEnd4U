@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/film_db?serverTimezone=GMT%2B8&useSSL=true
-    username: qiuyan
-    password: Mei23333
+    url: jdbc:mysql://rm-cn-uax3cv8az000yy5o.rwlb.cn-chengdu.rds.aliyuncs.com:3306/blog_proj?serverTimezone=GMT%2B8&useSSL=true
+    username: blog_proj
+    password: CQU_BlogProj0820
   redis:
     host: redis
     port: 6379
