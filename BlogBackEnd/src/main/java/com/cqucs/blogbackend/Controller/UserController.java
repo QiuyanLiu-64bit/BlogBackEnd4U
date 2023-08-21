@@ -1,5 +1,6 @@
 package com.cqucs.blogbackend.Controller;
 
+import com.cqucs.blogbackend.entity.Follow;
 import com.cqucs.blogbackend.entity.User;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @Api(tags = "用户模块")
@@ -84,7 +86,6 @@ public class UserController {
     @PutMapping("/update")
     public OperateResult update(User user){
         String sql = "update users set u_nickname=?,u_birth_date=?,u_register_date=?,u_signature=?,u_avatar_url=?,u_email=?,u_password=?,u_type=? where u_id=?";
-        //准备占位符的参数
         Object[] args = {user.getU_nickname(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url(),user.getU_email(),user.getU_password(),user.getU_type(),user.getU_id()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
@@ -101,13 +102,7 @@ public class UserController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody User user){
-        //将从前端接受的数据保存到数据库中
-        //如下SQL语句可能会造成SQL注入问题
-        //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
-        //int num = jdbcTemplate.update(sql);
-        //使用占位符的方式去编写SQL语句
         String sql = "insert into users values(default,?,?,?,?,?,?,?,?)";
-        //准备占位符的参数
         Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
@@ -116,4 +111,45 @@ public class UserController {
             return new OperateResult(500,"数据添加失败",null) ;
         }
     }
+
+
+
+    @ApiOperation(value = "添加关注",
+            protocols = "http",
+            httpMethod="POST",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @PostMapping("/follow")
+    public OperateResult follow(@RequestBody Follow follow){
+        String sql = "insert into follow values(?,?)";
+        Object[] args = {follow.getU_id(),follow.getUse_u_id()};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"数据添加成功",null) ;
+        }else{
+            return new OperateResult(500,"数据添加失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "取消关注",
+            protocols = "http",
+            httpMethod="DELETE",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+
+    @DeleteMapping("/unfollow/{use_u_id}")
+    public OperateResult unfollow(@PathVariable Integer use_u_id,Integer u_id){
+        try{
+            String sql = "delete from follow where u_id=? and use_u_id=?";
+            jdbcTemplate.update(sql,u_id,use_u_id);
+            return new OperateResult(200,"数据删除成功",null) ;
+        }catch(Exception e){
+            return new OperateResult(500,"数据删除失败",null) ;
+        }
+
+    }
+
+
 }

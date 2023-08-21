@@ -1,8 +1,7 @@
 package com.cqucs.blogbackend.Controller;
 
-
 import com.cqucs.blogbackend.entity.Article;
-import com.cqucs.blogbackend.entity.User;
+import com.cqucs.blogbackend.entity.Comment;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,34 +12,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "文章模块")
+@Api(tags = "评论模块")
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/comment")
 @CrossOrigin
-public class ArticleController {
+public class CommentController {
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @ApiOperation(value = "根据文章ID查询文章详细信息",
+    @ApiOperation(value = "根据评论ID查询评论详细信息",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
             response= OperateResult.class,
-            notes = "根据用户ID查询用户详细信息")
-    @GetMapping("/getarticle/{a_id}")
-    public OperateResult getById(@PathVariable Integer a_id){
+            notes = "根据评论ID查询评论详细信息")
+    @GetMapping("/getcomment/{c_id}")
+    public OperateResult getById(@PathVariable Integer c_id){
         try {
-            String sql = "select * from articles where a_id=?";
-            Article article = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Article.class),a_id);
-            return new OperateResult(200, "数据查询成功", article);
+            String sql = "select * from comments where c_id=?";
+            Comment comment = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Comment.class),c_id);
+            return new OperateResult(200, "数据查询成功", comment);
         }catch(Exception e){//Exception是所有异常的父类
             return new OperateResult(500,"查询数据失败",null);
         }
     }
 
 
-    @ApiOperation(value = "查询所有文章信息",
+    @ApiOperation(value = "查询所有评论信息",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
@@ -49,26 +49,26 @@ public class ArticleController {
     @GetMapping("/list")
     public OperateResult queryAll(){
         try {
-            String sql = "select * from articles";
-            List<Article> articles = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Article.class));
-            return new OperateResult(200, "数据查询成功", articles);
+            String sql = "select * from comments";
+            List<Comment> comments = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Comment.class));
+            return new OperateResult(200, "数据查询成功", comments);
         }catch(Exception e){//Exception是所有异常的父类
             return new OperateResult(500,"查询数据失败",null);
         }
     }
 
-    @ApiOperation(value = "删除文章数据",
+    @ApiOperation(value = "删除评论数据",
             protocols = "http",
             httpMethod="DELETE",
             consumes="application/json",
             response=OperateResult.class,
             notes = "code:200 表示成功")
 
-    @DeleteMapping("/delete/{a_id}")
-    public OperateResult delete(@PathVariable Integer a_id){
+    @DeleteMapping("/delete/{c_id}")
+    public OperateResult delete(@PathVariable Integer c_id){
         try{
-            String sql = "delete from articles where a_id=?";
-            jdbcTemplate.update(sql,a_id);
+            String sql = "delete from comments where c_id=?";
+            jdbcTemplate.update(sql,c_id);
             return new OperateResult(200,"数据删除成功",null) ;
         }catch(Exception e){
             return new OperateResult(500,"数据删除失败",null) ;
@@ -77,17 +77,17 @@ public class ArticleController {
     }
 
 
-    @ApiOperation(value = "修改用户数据",
+    @ApiOperation(value = "修改评论数据",
             protocols = "http",
             httpMethod="PUT",
             consumes="application/json",
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(Article article){
-        String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_views=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
+    public OperateResult update(Comment comment){
+        String sql = "update comments set c_time=?,c_content=? where c_id=?";
         //准备占位符的参数
-        Object[] args = {article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_views(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url(),article.getA_id()};
+        Object[] args = {comment.getC_time(),comment.getC_content(),comment.getC_id()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据修改成功",null) ;
@@ -95,22 +95,22 @@ public class ArticleController {
             return new OperateResult(500,"数据修改失败",null) ;
         }
     }
-    @ApiOperation(value = "添加文章数据",
+    @ApiOperation(value = "添加评论数据",
             protocols = "http",
             httpMethod="POST",
             consumes="application/json",
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody Article article){
+    public OperateResult create(@RequestBody Comment comment){
         //将从前端接受的数据保存到数据库中
         //如下SQL语句可能会造成SQL注入问题
         //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
         //int num = jdbcTemplate.update(sql);
         //使用占位符的方式去编写SQL语句
-        String sql = "insert into articles values(default,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into comments values(default,?,?,?,?)";
         //准备占位符的参数
-        Object[] args = {article.getU_id(),article.getCg_id(),article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_views(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url()};
+        Object[] args = {comment.getU_id(),comment.getA_id(),comment.getC_time(),comment.getC_content()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据添加成功",null) ;
