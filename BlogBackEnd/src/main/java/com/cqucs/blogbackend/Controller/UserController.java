@@ -1,5 +1,6 @@
 package com.cqucs.blogbackend.Controller;
 
+import com.cqucs.blogbackend.entity.DTO.UserDTO;
 import com.cqucs.blogbackend.entity.Follow;
 import com.cqucs.blogbackend.entity.User;
 import com.cqucs.blogbackend.tools.OperateResult;
@@ -103,7 +104,7 @@ public class UserController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody User user){
+    public OperateResult create(@RequestBody UserDTO user){
         String sql = "insert into users values(default,?,?,?,?,?,?,?,?)";
         Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url()};
         int num = jdbcTemplate.update(sql,args);
@@ -153,5 +154,20 @@ public class UserController {
 
     }
 
-
+    @ApiOperation(value = "查询关注列表",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/followlist/{u_id}")
+    public OperateResult followlist(@PathVariable Integer u_id){
+        try {
+            String sql = "select * from follow where u_id=?";
+            List<Follow> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Follow.class),u_id);
+            return new OperateResult(200, "数据查询成功", follows);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
 }
