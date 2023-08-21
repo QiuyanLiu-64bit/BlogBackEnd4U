@@ -1,5 +1,6 @@
 package com.cqucs.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -39,12 +40,15 @@ public class Article {
     private Integer a_views;
 
     @ApiModelProperty(value = "文章创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date a_create_time;
 
     @ApiModelProperty(value = "文章发布时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date a_deliver_time;
 
     @ApiModelProperty(value = "文章更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date a_update_time;
 
     @ApiModelProperty(value = "文章封面")

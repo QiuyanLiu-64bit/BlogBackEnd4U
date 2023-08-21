@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dynamics {
-    @ApiModelProperty(value = "动态编号")
-    private Integer d_id;
-
     @ApiModelProperty(value = "用户编号")
     private Integer u_id;
 
