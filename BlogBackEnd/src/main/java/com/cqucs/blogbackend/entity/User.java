@@ -1,5 +1,6 @@
 package com.cqucs.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +28,11 @@ public class User {
     private String u_nickname;
 
     @ApiModelProperty(value = "用户生日")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date u_birth_date;
 
     @ApiModelProperty(value = "用户注册日期")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date u_register_date;
 
     @ApiModelProperty(value = "用户个性签名")
