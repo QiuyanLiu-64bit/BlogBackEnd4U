@@ -5,26 +5,26 @@ spring:
     url: jdbc:mysql://rm-cn-uax3cv8az000yy5o.rwlb.cn-chengdu.rds.aliyuncs.com:3306/blog_proj?serverTimezone=GMT%2B8&useSSL=true
     username: blog_proj
     password: CQU_BlogProj0820
-  redis:
-    host: 47.94.128.215
-    port: 8379
-logging:
-  level:
-    pers.qianyucc.qblog.dao: trace
-
-minio:
-  server: http://117.50.23.198:8884/
-  access-key: AKIAIOSFODNN7EXAMPLE
-  secret-key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-  bucket: qblog
-qiniu:
-  server: http://upload-z2.qiniup.com
-  url: http://images.codingli.xyz/
-  access-key: knQrQNZO7UAIGCmDuXpSt_yeeF2WI_OykM6IITNN
-  secret-key: DYr3LHywS5TdxPuxvcuBsW_3JkfOBnvEkau5Ubvn
-  bucket: qimages-api
-
-setting:
-  path: _qblog/qblog.setting
-remote:
-  logUrl: http://localhost:7004/
+#  redis:
+#    host: 47.94.128.215
+#    port: 8379
+#logging:
+#  level:
+#    pers.qianyucc.qblog.dao: trace
+#
+#minio:
+#  server: http://117.50.23.198:8884/
+#  access-key: AKIAIOSFODNN7EXAMPLE
+#  secret-key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+#  bucket: qblog
+#qiniu:
+#  server: http://upload-z2.qiniup.com
+#  url: http://images.codingli.xyz/
+#  access-key: knQrQNZO7UAIGCmDuXpSt_yeeF2WI_OykM6IITNN
+#  secret-key: DYr3LHywS5TdxPuxvcuBsW_3JkfOBnvEkau5Ubvn
+#  bucket: qimages-api
+#
+#setting:
+#  path: _qblog/qblog.setting
+#remote:
+#  logUrl: http://localhost:7004/
