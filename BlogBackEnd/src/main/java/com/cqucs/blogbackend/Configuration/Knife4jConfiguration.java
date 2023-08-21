@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.configuration;
+package com.cqucs.blogbackend.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
