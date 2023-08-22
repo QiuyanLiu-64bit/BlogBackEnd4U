@@ -39,6 +39,23 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "根据用户ID查询用户所有文章信息",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response= OperateResult.class,
+            notes = "根据用户ID查询用户所有文章信息")
+    @GetMapping("/getarticlebyuid/{u_id}")
+    public OperateResult getByUid(@PathVariable Integer u_id){
+        try {
+            String sql = "select * from articles where u_id=?";
+            List<Article> articles = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),u_id);
+            return new OperateResult(200, "数据查询成功", articles);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
 
     @ApiOperation(value = "查询所有文章信息",
             protocols = "http",
@@ -85,9 +102,9 @@ public class ArticleController {
             notes = "code:200 表示成功")
     @PutMapping("/update")
     public OperateResult update(Article article){
-        String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_views=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
+        String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
         //准备占位符的参数
-        Object[] args = {article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_views(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url(),article.getA_id()};
+        Object[] args = {article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url(),article.getA_id()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据修改成功",null) ;
@@ -108,9 +125,9 @@ public class ArticleController {
         //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
         //int num = jdbcTemplate.update(sql);
         //使用占位符的方式去编写SQL语句
-        String sql = "insert into articles values(default,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into articles values(default,?,?,?,?,?,?,?,?,?,?)";
         //准备占位符的参数
-        Object[] args = {article.getU_id(),article.getCg_id(),article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_views(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url()};
+        Object[] args = {article.getU_id(),article.getCg_id(),article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据添加成功",null) ;
@@ -193,4 +210,42 @@ public class ArticleController {
             return new OperateResult(500,"搜索失败",null);
         }
     }
+
+    @ApiOperation(value = "文章阅读量+1",
+            protocols = "http",
+            httpMethod="PUT",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @PutMapping("/addviews")
+    public OperateResult addviews(@ApiParam(name = "a_id",value = "输入文章ID",required = true) @RequestParam  String a_id,
+                                  @ApiParam(name = "u_id",value = "输入用户ID",required = true) @RequestParam  String u_id){
+        String sql = "insert into read_article values(default, ?, ?, NOW())";
+        //准备占位符的参数
+        Object[] args = {u_id,a_id};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"阅读量+1",null) ;
+        }else{
+            return new OperateResult(500,"阅读量+1失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "查询文章阅读量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getviews/{a_id}")
+    public OperateResult getviews(@PathVariable String a_id){
+        try {
+            String sql = "select count(*) from read_article where a_id=?";
+            Integer views = jdbcTemplate.queryForObject(sql,Integer.class,a_id);
+            return new OperateResult(200, "数据查询成功", views);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"阅读量为空，值为0",null);
+        }
+    }
+
 }

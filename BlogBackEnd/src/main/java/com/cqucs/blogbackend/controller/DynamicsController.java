@@ -28,7 +28,7 @@ public class DynamicsController {
     @PostMapping("/create")
     public OperateResult create(@RequestBody Dynamics dynamic){
         try {
-            String sql = "insert into dynamics VALUES(default,?,?,?,?,?,?)";
+            String sql = "insert into dynamics VALUES(default,?,?,NOW(),?,?,?,?)";
             Object[] args = {dynamic.getU_id(), dynamic.getD_content(), dynamic.getD_image1(), dynamic.getD_image2(), dynamic.getD_image3(), dynamic.getD_image4()};
             jdbcTemplate.update(sql, args);
             return new OperateResult(200, "动态数据添加成功", null);
@@ -47,7 +47,7 @@ public class DynamicsController {
     @PutMapping("/update")
     public OperateResult update(@RequestBody Dynamics dynamic){
         try {
-            String sql = "update dynamics set u_id=?,d_content=?,d_image1=?,d_image2=?,d_image3=?,d_image4=? where d_id=?";
+            String sql = "update dynamics set u_id=?,d_content=?,d_create_time=NOW(),d_image1=?,d_image2=?,d_image3=?,d_image4=? where d_id=?";
             Object[] args = {dynamic.getU_id(), dynamic.getD_content(), dynamic.getD_image1(), dynamic.getD_image2(), dynamic.getD_image3(), dynamic.getD_image4()};
             jdbcTemplate.update(sql, args);
             return new OperateResult(200, "动态数据修改成功", null);
