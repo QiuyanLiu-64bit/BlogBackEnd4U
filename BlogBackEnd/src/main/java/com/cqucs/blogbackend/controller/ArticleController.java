@@ -268,6 +268,25 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "计算文章点赞率",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getlikerate/{a_id}")
+    public OperateResult getlikerate(@ApiParam(name = "a_id",value = "输入文章ID",required = true) @RequestParam String a_id){
+        try {
+            String sql = "select count(*) from article_likes where a_id=?";
+            Integer likenum = jdbcTemplate.queryForObject(sql,Integer.class,a_id);
+            sql = "select count(*) from article_likes";
+            Integer allnum = jdbcTemplate.queryForObject(sql,Integer.class);
+            return new OperateResult(200, "数据查询成功", likenum/allnum);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
     @ApiOperation(value = "关键词搜索文章",
             protocols = "http",
             httpMethod="GET",

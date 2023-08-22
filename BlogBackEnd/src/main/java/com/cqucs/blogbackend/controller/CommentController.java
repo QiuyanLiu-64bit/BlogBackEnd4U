@@ -118,4 +118,20 @@ public class CommentController {
         }
     }
 
+    @ApiOperation(value = "统计评论量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/commentCount")
+    public OperateResult commentCount(){
+        try {
+            String sql = "select count(*) from comments";
+            Integer count = jdbcTemplate.queryForObject(sql,Integer.class);
+            return new OperateResult(200, "数据查询成功", count);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
 }
