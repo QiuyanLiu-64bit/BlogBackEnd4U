@@ -1,6 +1,7 @@
 package com.cqucs.blogbackend.controller;
 
 import com.cqucs.blogbackend.entity.Dynamics;
+import com.cqucs.blogbackend.entity.dto.DynamicsDTO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +27,7 @@ public class DynamicsController {
             response= OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody Dynamics dynamic){
+    public OperateResult create(@RequestBody DynamicsDTO dynamic){
         try {
             String sql = "insert into dynamics VALUES(default,?,?,NOW(),?,?,?,?)";
             Object[] args = {dynamic.getU_id(), dynamic.getD_content(), dynamic.getD_image1(), dynamic.getD_image2(), dynamic.getD_image3(), dynamic.getD_image4()};
@@ -45,7 +46,7 @@ public class DynamicsController {
             response= OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(@RequestBody Dynamics dynamic){
+    public OperateResult update(@RequestBody DynamicsDTO dynamic){
         try {
             String sql = "update dynamics set u_id=?,d_content=?,d_create_time=NOW(),d_image1=?,d_image2=?,d_image3=?,d_image4=? where d_id=?";
             Object[] args = {dynamic.getU_id(), dynamic.getD_content(), dynamic.getD_image1(), dynamic.getD_image2(), dynamic.getD_image3(), dynamic.getD_image4()};
