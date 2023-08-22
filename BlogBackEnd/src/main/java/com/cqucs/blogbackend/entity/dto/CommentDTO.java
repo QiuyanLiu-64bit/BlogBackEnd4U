@@ -17,9 +17,6 @@ public class CommentDTO {
     @ApiModelProperty(value = "文章编号")
     private Integer a_id;
 
-    @ApiModelProperty(value = "评论时间")
-    private Date c_time;
-
     @ApiModelProperty(value = "评论内容")
     private String c_content;
 }

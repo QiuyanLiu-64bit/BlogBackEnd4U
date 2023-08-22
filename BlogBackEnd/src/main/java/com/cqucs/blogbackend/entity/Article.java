@@ -41,7 +41,7 @@ public class Article {
     private Date a_create_time;
 
     @ApiModelProperty(value = "文章发布时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date a_deliver_time;
 
     @ApiModelProperty(value = "文章更新时间")

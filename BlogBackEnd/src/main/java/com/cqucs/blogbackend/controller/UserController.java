@@ -54,7 +54,7 @@ public class UserController {
         try {
             /*String sql = "select * from users where u_email=?";
             User user = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(User.class),u_email);*/
-            String sql = "select count(u_id) from users where u_email=?";
+            String sql = "select count(*) from users where u_email=?";
             Integer count = jdbcTemplate.queryForObject(sql,Integer.class,u_email);
             if(count==0){
                 return new OperateResult(200, "用户不存在", true);
