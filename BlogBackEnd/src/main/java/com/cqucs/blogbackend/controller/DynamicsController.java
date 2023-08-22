@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.Controller;
+package com.cqucs.blogbackend.controller;
 
 import com.cqucs.blogbackend.entity.Dynamics;
 import com.cqucs.blogbackend.tools.OperateResult;

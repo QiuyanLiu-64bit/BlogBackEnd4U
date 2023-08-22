@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.entity.DTO;
+package com.cqucs.blogbackend.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;

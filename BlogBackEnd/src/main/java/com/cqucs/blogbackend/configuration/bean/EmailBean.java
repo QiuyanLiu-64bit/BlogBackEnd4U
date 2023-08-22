@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.Configuration.bean;
+package com.cqucs.blogbackend.configuration.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

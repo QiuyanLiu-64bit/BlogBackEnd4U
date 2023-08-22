@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.Configuration;
+package com.cqucs.blogbackend.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +19,14 @@ public class Knife4jConfiguration {
 //.title("swagger‐bootstrap‐ui‐demo RESTful APIs")
                         .description("博客项目")
                         .termsOfServiceUrl("http://www.xx.com/")
-                        .contact("xxxxxx@qq.com")
+                        .contact("cqucsblogtest@163.com")
                         .version("1.0")
                         .build())
                 //分组名称
                 .groupName("博客项目")
                 .select()
 //这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.cqucs.blogbackend.Controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.cqucs.blogbackend.controller"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;

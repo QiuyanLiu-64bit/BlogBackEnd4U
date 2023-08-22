@@ -1,6 +1,6 @@
-package com.cqucs.blogbackend.Controller;
+package com.cqucs.blogbackend.controller;
 
-import com.cqucs.blogbackend.entity.DTO.UserDTO;
+import com.cqucs.blogbackend.entity.dto.UserDTO;
 import com.cqucs.blogbackend.entity.Follow;
 import com.cqucs.blogbackend.entity.User;
 import com.cqucs.blogbackend.tools.OperateResult;
@@ -8,12 +8,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @Api(tags = "用户模块")
@@ -42,12 +40,30 @@ public class UserController {
         }
     }
 
-  /*  @ApiOperation(value = "根据用户邮箱查询用户是否存在",
+    @ApiOperation(value = "根据用户邮箱查询用户是否存在",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
             response=OperateResult.class,
-            notes = "根据用户邮箱查询用户详细信息")*/
+            notes = "根据用户邮箱查询用户是否存在")
+    @GetMapping("/getuserbyemail")   //http://localjost:8888/user/getuserbyemail?u_email=xxx
+    public OperateResult getByEmail(@ApiParam(name = "u_email",value = "邮箱地址",required = true)
+                                    @RequestParam String u_email){
+        try {
+            /*String sql = "select * from users where u_email=?";
+            User user = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(User.class),u_email);*/
+            String sql = "select count(u_id) from users where u_email=?";
+            Integer count = jdbcTemplate.queryForObject(sql,Integer.class,u_email);
+            if(count==0){
+                return new OperateResult(200, "用户不存在", true);
+            }
+            return new OperateResult(200, "用户存在", true);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"程序内部错误",false);
+        }
+    }
+
 
     @ApiOperation(value = "查询所有用户数据",
             protocols = "http",

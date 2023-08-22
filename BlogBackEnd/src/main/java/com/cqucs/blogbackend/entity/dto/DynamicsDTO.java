@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.entity.DTO;
+package com.cqucs.blogbackend.entity.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

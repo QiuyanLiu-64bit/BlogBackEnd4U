@@ -1,6 +1,6 @@
 package com.cqucs.blogbackend.util;
 
-import com.cqucs.blogbackend.Configuration.bean.EmailBean;
+import com.cqucs.blogbackend.configuration.bean.EmailBean;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
