@@ -36,9 +36,6 @@ public class Article {
     @ApiModelProperty(value = "文章标题")
     private String a_title;
 
-    @ApiModelProperty(value = "文章浏览数")
-    private Integer a_views;
-
     @ApiModelProperty(value = "文章创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date a_create_time;
