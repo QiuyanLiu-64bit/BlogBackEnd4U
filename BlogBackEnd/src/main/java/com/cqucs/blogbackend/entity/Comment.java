@@ -1,5 +1,6 @@
 package com.cqucs.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Comment {
     private Integer a_id;
 
     @ApiModelProperty(value = "评论时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date c_time;
 
     @ApiModelProperty(value = "评论内容")

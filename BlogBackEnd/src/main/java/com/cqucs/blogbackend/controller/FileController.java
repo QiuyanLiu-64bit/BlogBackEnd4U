@@ -1,15 +1,19 @@
 package com.cqucs.blogbackend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.swagger.annotations.ApiParam;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
 
 @Api(tags = "文件模块")
 @RestController
@@ -23,6 +27,8 @@ public class FileController {
     public FileController() {
         rootPath = System.getProperty("user.dir");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(FileController.class);
 
     @ApiOperation(value = "文件上传",
             protocols = "http",
@@ -71,18 +77,19 @@ public class FileController {
             notes = "code:200 表示成功")
     // 处理上传文件的请求
     @GetMapping("/download")
-    public OperateResult downloadFile(@ApiParam(name = "fileName", value = "输入文件名", required = true) @RequestParam String fileName) {
-        /*try {
+    public void downloadFile(@ApiParam(name = "fileName", value = "输入文件名", required = true) @RequestParam String fileName,
+                                      @ApiIgnore HttpServletResponse response) {
+        try {
             // 构建文件完整路径
             String dir = rootPath + "\\staticFiles\\";
             String filePath = dir + fileName;
 
             File file = new File(filePath);
 
-            if (!file.exists()) {
+            /*if (!file.exists()) {
                 // 文件不存在，返回错误响应或其他处理
-                return new OperateResult(500, "文件不存在", null);
-            }
+//                return new OperateResult(500, "文件不存在", null);
+            }*/
             log.info(file.getPath());
             // 获取文件名
             String filename = file.getName();
@@ -111,11 +118,12 @@ public class FileController {
             response.setContentType("application/octet-stream");
             outputStream.write(buffer);
             outputStream.flush();
+//            return new OperateResult(200, "下载成功", null);
         } catch (IOException ex) {
             ex.printStackTrace();
-            return new OperateResult(500, "下载失败", null);
+//            return new OperateResult(500, "下载失败", null);
 //            return ResponseEntity.ok("No!");
-        }*/
-        return new OperateResult(500, "下载失败", null);
+        }
+//        return new OperateResult(500, "下载失败", null);
     }
 }

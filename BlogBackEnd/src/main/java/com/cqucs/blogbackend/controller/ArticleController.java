@@ -157,6 +157,30 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "查询文章是否已被收藏",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/iscollected")
+    public OperateResult iscollected(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                     @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        try {
+            String sql = "select count(*) from article_favorites where u_id=? and a_id=?";
+            Object[] args = {u_id, a_id};
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, args);
+            if (count == 0) {
+                return new OperateResult(200, "未收藏", true);
+            } else {
+                return new OperateResult(200, "已收藏", false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"错误",null);
+        }
+    }
+
     @ApiOperation(value = "取消收藏文章",
             protocols = "http",
             httpMethod="DELETE",
@@ -229,6 +253,30 @@ public class ArticleController {
             return new OperateResult(200,"点赞成功",null) ;
         }else{
             return new OperateResult(500,"点赞失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "查询文章是否被点赞",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/isliked")
+    public OperateResult isliked(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                 @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        try {
+            String sql = "select count(*) from article_likes where u_id=? and a_id=?";
+            Object[] args = {u_id, a_id};
+            int num = jdbcTemplate.update(sql, args);
+            if (num == 0) {
+                return new OperateResult(200, "未点赞", true);
+            } else {
+                return new OperateResult(200, "已点赞", false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"错误",null);
         }
     }
 

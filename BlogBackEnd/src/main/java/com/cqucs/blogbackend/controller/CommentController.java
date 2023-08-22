@@ -125,9 +125,9 @@ public class CommentController {
         //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
         //int num = jdbcTemplate.update(sql);
         //使用占位符的方式去编写SQL语句
-        String sql = "insert into comments values(default,?,?,?,?)";
+        String sql = "insert into comments values(default,?,?,NOW(),?)";
         //准备占位符的参数
-        Object[] args = {comment.getU_id(),comment.getA_id(),comment.getC_time(),comment.getC_content()};
+        Object[] args = {comment.getU_id(),comment.getA_id(),comment.getC_content()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据添加成功",null) ;
