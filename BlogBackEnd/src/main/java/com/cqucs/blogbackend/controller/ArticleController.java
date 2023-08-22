@@ -196,6 +196,78 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "查询文章收藏量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getcollectnum/{a_id}")
+    public OperateResult getcollectnum(@PathVariable String a_id){
+        try {
+            String sql = "select count(*) from article_favorites where a_id=?";
+            Integer collectnum = jdbcTemplate.queryForObject(sql,Integer.class,a_id);
+            return new OperateResult(200, "数据查询成功", collectnum);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "添加文章点赞",
+            protocols = "http",
+            httpMethod="POST",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @PostMapping("/addlike")
+    public OperateResult addlike(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                 @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        String sql = "insert into article_likes values(?,?)";
+        Object[] args = {u_id,a_id};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"点赞成功",null) ;
+        }else{
+            return new OperateResult(500,"点赞失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "取消文章点赞",
+            protocols = "http",
+            httpMethod="DELETE",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @DeleteMapping("/deletelike")
+    public OperateResult deletelike(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                    @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        String sql = "delete from article_likes where u_id=? and a_id=?";
+        Object[] args = {u_id,a_id};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"取消点赞成功",null) ;
+        }else{
+            return new OperateResult(500,"取消点赞失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "查询文章点赞量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getlikenum/{a_id}")
+    public OperateResult getlikenum(@PathVariable String a_id){
+        try {
+            String sql = "select count(*) from article_likes where a_id=?";
+            Integer likenum = jdbcTemplate.queryForObject(sql,Integer.class,a_id);
+            return new OperateResult(200, "数据查询成功", likenum);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
     @ApiOperation(value = "关键词搜索文章",
             protocols = "http",
             httpMethod="GET",

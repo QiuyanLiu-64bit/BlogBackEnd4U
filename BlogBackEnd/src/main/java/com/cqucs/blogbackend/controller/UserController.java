@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -138,6 +139,29 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "用户登录查询",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response= OperateResult.class,
+            notes = "用户登录查询: code:200 表示成功")
+    @GetMapping("/login")
+    public OperateResult logcin(@ApiParam(name="email",value="账户名",required = true) String email,
+                                @ApiParam(name="password",value="账户密码", required = true) String password){
+        try {
+            String sql = "select * from users where u_email = ?";
+            User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class),email);
+            if(password.equals(user.getU_password()))
+                return new OperateResult(200, "登录成功", user);
+            else
+                return new OperateResult(200,"密码错误",null);
+        }catch (EmptyResultDataAccessException e){
+            return new OperateResult(200,"用户不存在",null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"登录失败",null);
+        }
+    }
 
 
     @ApiOperation(value = "添加关注",
