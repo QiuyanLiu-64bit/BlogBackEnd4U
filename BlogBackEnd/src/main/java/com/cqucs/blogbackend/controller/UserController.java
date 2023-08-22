@@ -121,6 +121,26 @@ public class UserController {
             return new OperateResult(500,"数据修改失败",null) ;
         }
     }
+
+    @ApiOperation(value = "修改用户密码",
+            protocols = "http",
+            httpMethod="PUT",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @PutMapping("/updatepassword")
+    public OperateResult updatePassword(@ApiParam(name="u_email",value="用户邮箱",required = true) String u_email,
+                                        @ApiParam(name="u_password",value="用户密码", required = true) String u_password){
+        String sql = "update users set u_password=? where u_email=?";
+        Object[] args = {u_password,u_email};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"数据修改成功",null) ;
+        }else{
+            return new OperateResult(500,"数据修改失败",null) ;
+        }
+    }
+
     @ApiOperation(value = "添加/注册用户数据",
             protocols = "http",
             httpMethod="POST",

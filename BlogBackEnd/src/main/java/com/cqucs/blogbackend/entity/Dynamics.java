@@ -19,7 +19,7 @@ public class Dynamics {
     private String d_content;
 
     @ApiModelProperty(value = "动态创建时间")
-    private String d_create_time;
+    private Long d_create_time;
 
     @ApiModelProperty(value = "动态图片1")
     private String d_image1;
