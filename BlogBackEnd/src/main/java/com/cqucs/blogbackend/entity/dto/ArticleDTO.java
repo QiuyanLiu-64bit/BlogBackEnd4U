@@ -1,4 +1,4 @@
-package com.cqucs.blogbackend.entity;
+package com.cqucs.blogbackend.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class ArticleDTO {
     @ApiModelProperty(value = "文章编号")
     private Integer a_id;
 
@@ -37,17 +37,9 @@ public class Article {
     @ApiModelProperty(value = "文章标题")
     private String a_title;
 
-    @ApiModelProperty(value = "文章创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date a_create_time;
-
     @ApiModelProperty(value = "文章发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp a_deliver_time;
-
-    @ApiModelProperty(value = "文章更新时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date a_update_time;
 
     @ApiModelProperty(value = "文章封面")
     private String a_cover_url;

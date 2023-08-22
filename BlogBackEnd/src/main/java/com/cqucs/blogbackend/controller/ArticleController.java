@@ -2,6 +2,7 @@ package com.cqucs.blogbackend.controller;
 
 
 import com.cqucs.blogbackend.entity.Article;
+import com.cqucs.blogbackend.entity.dto.ArticleDTO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Api(tags = "文章模块")
@@ -116,27 +118,30 @@ public class ArticleController {
 
     @ApiOperation(value = "添加文章数据",
             protocols = "http",
-            httpMethod="POST",
-            consumes="application/json",
-            response=OperateResult.class,
+            httpMethod = "POST",
+            consumes = "application/json",
+            response = OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody Article article){
-        //将从前端接受的数据保存到数据库中
-        //如下SQL语句可能会造成SQL注入问题
-        //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
-        //int num = jdbcTemplate.update(sql);
-        //使用占位符的方式去编写SQL语句
-        String sql = "insert into articles values(default,?,?,?,?,?,?,?,?,?,?)";
-        //准备占位符的参数
-        Object[] args = {article.getU_id(),article.getCg_id(),article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据添加成功",null) ;
-        }else{
-            return new OperateResult(500,"数据添加失败",null) ;
+    public OperateResult create(@RequestBody ArticleDTO article) {
+        Timestamp deliverTime = article.getA_deliver_time();
+
+        if (deliverTime == null) {
+            deliverTime = new Timestamp(System.currentTimeMillis());
+        }
+
+        String sql = "insert into articles values(default,?,?,?,?,?,?,NOW(),?,NOW(),?)";
+        // 准备占位符的参数
+        Object[] args = {article.getU_id(), article.getCg_id(), article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), deliverTime, article.getA_cover_url()};
+        int num = jdbcTemplate.update(sql, args);
+
+        if (num > 0) {
+            return new OperateResult(200, "数据添加成功", null);
+        } else {
+            return new OperateResult(500, "数据添加失败", null);
         }
     }
+
 
     @ApiOperation(value = "添加收藏文章",
             protocols = "http",
@@ -256,7 +261,7 @@ public class ArticleController {
         }
     }
 
-    @ApiOperation(value = "查询文章是否被点赞",
+    @ApiOperation(value = "查询文章是否已被点赞",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
@@ -268,7 +273,7 @@ public class ArticleController {
         try {
             String sql = "select count(*) from article_likes where u_id=? and a_id=?";
             Object[] args = {u_id, a_id};
-            int num = jdbcTemplate.update(sql, args);
+            int num = jdbcTemplate.queryForObject(sql, Integer.class, args);
             if (num == 0) {
                 return new OperateResult(200, "未点赞", true);
             } else {
