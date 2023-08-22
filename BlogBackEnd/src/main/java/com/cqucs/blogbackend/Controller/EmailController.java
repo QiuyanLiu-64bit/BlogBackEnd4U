@@ -102,7 +102,7 @@ public class EmailController {
     @PostMapping("/{email}/verifycode")
     public OperateResult VerifyCode(@PathVariable String email,String authCode) {
         try {
-            String sql = "select * from verification_codes";
+            String sql = "select * from verification_codes where email = ?";
             List<VerificationCode> Coder = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(VerificationCode.class));
             if (Coder.isEmpty()) {
                 return new OperateResult(500, "账号不存在", null);

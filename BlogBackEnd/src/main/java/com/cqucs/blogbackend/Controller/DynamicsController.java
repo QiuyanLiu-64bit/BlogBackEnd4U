@@ -68,10 +68,10 @@ public class DynamicsController {
         try {
             String sql = "delete from dynamics where d_id =?";
             jdbcTemplate.update(sql, d_id);
-            return new OperateResult(200, "数据删除成功", null);
+            return new OperateResult(200, "动态数据删除成功", null);
         }catch (Exception e){
             e.printStackTrace();
-            return new OperateResult(500, "数据删除失败", null);
+            return new OperateResult(500, "动态数据删除失败", null);
         }
     }
 
@@ -86,10 +86,10 @@ public class DynamicsController {
         try {
             String sql = "select * from dynamics";
             List<Dynamics> dynamics = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Dynamics.class));
-            return new OperateResult(200, "数据查询成功", dynamics);
+            return new OperateResult(200, "动态数据查询成功", dynamics);
         }catch (Exception e){
             e.printStackTrace();
-            return new OperateResult(500,"数据查询失败",null);
+            return new OperateResult(500,"动态数据查询失败",null);
         }
     }
 
