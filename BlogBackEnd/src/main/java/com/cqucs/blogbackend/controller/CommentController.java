@@ -1,6 +1,7 @@
 package com.cqucs.blogbackend.controller;
 
 import com.cqucs.blogbackend.entity.Comment;
+import com.cqucs.blogbackend.entity.dto.CommentDTO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -118,7 +119,7 @@ public class CommentController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody Comment comment){
+    public OperateResult create(@RequestBody CommentDTO comment){
         //将从前端接受的数据保存到数据库中
         //如下SQL语句可能会造成SQL注入问题
         //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
