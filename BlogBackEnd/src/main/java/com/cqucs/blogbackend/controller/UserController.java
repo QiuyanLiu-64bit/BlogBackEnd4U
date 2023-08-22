@@ -111,7 +111,7 @@ public class UserController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(User user){
+    public OperateResult update(@RequestBody User user){
         String sql = "update users set u_nickname=?,u_birth_date=?,u_register_date=?,u_signature=?,u_avatar_url=?,u_email=?,u_password=?,u_type=? where u_id=?";
         Object[] args = {user.getU_nickname(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url(),user.getU_email(),user.getU_password(),user.getU_type(),user.getU_id()};
         int num = jdbcTemplate.update(sql,args);

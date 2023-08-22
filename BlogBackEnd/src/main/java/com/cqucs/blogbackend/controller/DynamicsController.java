@@ -19,7 +19,7 @@ public class DynamicsController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @ApiOperation(value = "添加/注册动态数据",
+    @ApiOperation(value = "添加动态数据",
             protocols = "http",
             httpMethod="POST",
             consumes="application/json",
@@ -75,7 +75,7 @@ public class DynamicsController {
         }
     }
 
-    @ApiOperation(value = "查询所有动态数据",
+    @ApiOperation(value = "按时间顺序降序查询所有动态数据",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
@@ -84,7 +84,7 @@ public class DynamicsController {
     @GetMapping("/list")
     public OperateResult queryAll(){
         try {
-            String sql = "select * from dynamics";
+            String sql = "select * from dynamics order by d_create_time desc";
             List<Dynamics> dynamics = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Dynamics.class));
             return new OperateResult(200, "动态数据查询成功", dynamics);
         }catch (Exception e){

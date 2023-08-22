@@ -83,7 +83,7 @@ public class CategoriesController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(Categories category){
+    public OperateResult update(@RequestBody Categories category){
         String sql = "update categories set cg_name where cg_id=?";
         //准备占位符的参数
         Object[] args = {category.getCg_name(),category.getCg_id()};
