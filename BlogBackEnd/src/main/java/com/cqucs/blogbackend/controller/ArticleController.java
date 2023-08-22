@@ -77,7 +77,7 @@ public class ArticleController {
     }
 
 
-    @ApiOperation(value = "修改用户数据",
+    @ApiOperation(value = "修改文章数据",
             protocols = "http",
             httpMethod="PUT",
             consumes="application/json",
@@ -174,6 +174,23 @@ public class ArticleController {
             return new OperateResult(200, "数据查询成功", articles);
         }catch(Exception e){//Exception是所有异常的父类
             return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "关键词搜索文章",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/search")
+    public OperateResult search(@ApiParam(name = "keyword",value = "输入关键词",required = true) @RequestParam  String keyword){
+        try {
+            String sql = "select * from `articles` where MATCH(`a_title`,`a_content`) AGAINST (? IN NATURAL LANGUAGE MODE);";
+            List<Article> articles = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Article.class),keyword);
+            return new OperateResult(200, "搜索成功", articles);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"搜索失败",null);
         }
     }
 }

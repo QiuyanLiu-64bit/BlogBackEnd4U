@@ -3,6 +3,7 @@ package com.cqucs.blogbackend.controller;
 import com.cqucs.blogbackend.entity.dto.UserDTO;
 import com.cqucs.blogbackend.entity.Follow;
 import com.cqucs.blogbackend.entity.User;
+import com.cqucs.blogbackend.entity.vo.UserVO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -185,8 +186,11 @@ public class UserController {
     @GetMapping("/followlist/{u_id}")
     public OperateResult followlist(@PathVariable Integer u_id){
         try {
-            String sql = "select * from follow where u_id=?";
-            List<Follow> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Follow.class),u_id);
+            String sql = "SELECT u.u_avatar_url, u.u_nickname\n" +
+                    "FROM follow f\n" +
+                    "JOIN users u ON f.use_u_id = u.u_id\n" +
+                    "WHERE f.u_id = ?;\n";
+            List<UserVO> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(UserVO.class),u_id);
             return new OperateResult(200, "数据查询成功", follows);
         }catch(Exception e){//Exception是所有异常的父类
             return new OperateResult(500,"查询数据失败",null);
