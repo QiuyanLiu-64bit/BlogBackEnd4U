@@ -112,8 +112,8 @@ public class UserController {
             notes = "code:200 表示成功")
     @PutMapping("/update")
     public OperateResult update(@RequestBody User user){
-        String sql = "update users set u_nickname=?,u_birth_date=?,u_register_date=?,u_signature=?,u_avatar_url=?,u_email=?,u_password=?,u_type=? where u_id=?";
-        Object[] args = {user.getU_nickname(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url(),user.getU_email(),user.getU_password(),user.getU_type(),user.getU_id()};
+        String sql = "update users set u_nickname=?,u_gender=?,u_birth_date=?,u_register_date=?,u_signature=?,u_avatar_url=?,u_email=?,u_password=?,u_type=? where u_id=?";
+        Object[] args = {user.getU_nickname(),user.getU_gender(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url(),user.getU_email(),user.getU_password(),user.getU_type(),user.getU_id()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据修改成功",null) ;
@@ -149,8 +149,8 @@ public class UserController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody UserDTO user){
-        String sql = "insert into users values(default,?,?,?,?,Null,?,?,?)";
-        Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url()};
+        String sql = "insert into users values(default,?,?,?,?,?,Null,?,?,?)";
+        Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_gender(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据添加成功",null) ;

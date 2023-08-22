@@ -1,5 +1,13 @@
 package com.cqucs.blogbackend.controller;
 
+import io.swagger.annotations.ApiParam;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +36,7 @@ public class FileController {
             httpMethod = "POST",
             consumes = "application/json",
             response = OperateResult.class,
-            notes = "根据用户ID查询用户详细信息")
+            notes = "code:200 表示成功")
     // 处理上传文件的请求
     @PostMapping("/upload")
     public OperateResult uploadFile(@RequestParam("file") MultipartFile file) {
@@ -58,6 +66,49 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
+        }
+    }
+
+
+    @ApiOperation(value = "文件下载",
+            protocols = "http",
+            httpMethod = "GET",
+            consumes = "application/json",
+            response = OperateResult.class,
+            notes = "code:200 表示成功")
+    // 创建一个GetMapping方法，接收文件名作为参数
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile(@ApiParam(name = "fileName",value = "输入文件名",required = true) @RequestParam String fileName) {
+        try{
+            // 定义静态文件路径
+            String dir = rootPath + "\\staticFiles\\";
+            // 根据文件名拼接完整的路径
+            String filePath = dir + fileName;
+            System.out.println(filePath);
+            File file = new File(filePath);
+
+            if (!file.exists()) {
+                // 文件不存在，返回错误响应或其他处理
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            // 创建一个HttpHeaders对象，用于设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            // 设置响应头为附件形式，并指定文件名
+            headers.setContentDispositionFormData("attachment", fileName);
+            // 设置响应类型为自动判断
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+            // 创建一个FileSystemResource对象，用于包装文件
+            FileSystemResource resource = new FileSystemResource(file);
+
+            // 返回一个ResponseEntity对象，包含资源，响应头和状态码
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

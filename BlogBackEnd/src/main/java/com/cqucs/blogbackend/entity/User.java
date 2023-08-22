@@ -27,6 +27,9 @@ public class User {
     @ApiModelProperty(value = "用户昵称")
     private String u_nickname;
 
+    @ApiModelProperty(value = "用户性别")
+    private String u_gender;
+
     @ApiModelProperty(value = "用户生日")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date u_birth_date;

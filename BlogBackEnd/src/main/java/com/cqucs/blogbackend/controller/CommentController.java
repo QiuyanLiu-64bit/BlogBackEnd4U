@@ -38,6 +38,23 @@ public class CommentController {
         }
     }
 
+    @ApiOperation(value = "根据文章ID查询评论详细信息",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response= OperateResult.class,
+            notes = "根据文章ID查询评论详细信息")
+    @GetMapping("/getcommentbyarticle/{a_id}")
+    public OperateResult getByArticleId(@PathVariable Integer a_id){
+        try {
+            String sql = "select * from comments where a_id=?";
+            List<Comment> comments = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Comment.class),a_id);
+            return new OperateResult(200, "数据查询成功", comments);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
 
     @ApiOperation(value = "查询所有评论信息",
             protocols = "http",
