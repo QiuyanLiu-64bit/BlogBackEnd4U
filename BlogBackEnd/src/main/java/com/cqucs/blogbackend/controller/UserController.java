@@ -166,8 +166,8 @@ public class UserController {
             response= OperateResult.class,
             notes = "用户登录查询: code:200 表示成功")
     @GetMapping("/login")
-    public OperateResult logcin(@ApiParam(name="email",value="账户名",required = true) String email,
-                                @ApiParam(name="password",value="账户密码", required = true) String password){
+    public OperateResult login(@ApiParam(name="email",value="账户名",required = true) String email,
+                               @ApiParam(name="password",value="账户密码", required = true) String password){
         try {
             String sql = "select * from users where u_email = ?";
             User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class),email);
