@@ -6,6 +6,7 @@ import com.cqucs.blogbackend.entity.User;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -119,4 +120,61 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "添加收藏文章",
+            protocols = "http",
+            httpMethod="POST",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @PostMapping("/addcollect")
+    public OperateResult addcollect(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                    @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        String sql = "insert into article_favorites values(?,?)";
+        Object[] args = {u_id,a_id};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"收藏成功",null) ;
+        }else{
+            return new OperateResult(500,"收藏失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "取消收藏文章",
+            protocols = "http",
+            httpMethod="DELETE",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @DeleteMapping("/deletecollect")
+    public OperateResult deletecollect(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
+                                       @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        String sql = "delete from article_favorites where u_id=? and a_id=?";
+        Object[] args = {u_id,a_id};
+        int num = jdbcTemplate.update(sql,args);
+        if(num>0){
+            return new OperateResult(200,"取消收藏成功",null) ;
+        }else{
+            return new OperateResult(500,"取消收藏失败",null) ;
+        }
+    }
+
+    @ApiOperation(value = "查询用户收藏文章",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getcollect/{u_id}")
+    public OperateResult getcollect(@PathVariable String u_id){
+        try {
+            String sql = "SELECT a.*\n" +
+                    "FROM article_favorites af\n" +
+                    "JOIN articles a ON af.a_id = a.a_id\n" +
+                    "WHERE af.u_id = ?;\n";
+            List<Article> articles = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Article.class),u_id);
+            return new OperateResult(200, "数据查询成功", articles);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
 }

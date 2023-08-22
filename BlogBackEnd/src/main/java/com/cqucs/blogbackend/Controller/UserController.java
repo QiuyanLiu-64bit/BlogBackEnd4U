@@ -42,6 +42,12 @@ public class UserController {
         }
     }
 
+  /*  @ApiOperation(value = "根据用户邮箱查询用户是否存在",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "根据用户邮箱查询用户详细信息")*/
 
     @ApiOperation(value = "查询所有用户数据",
             protocols = "http",
