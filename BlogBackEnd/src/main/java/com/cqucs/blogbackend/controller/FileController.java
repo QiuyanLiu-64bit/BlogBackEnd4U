@@ -61,7 +61,7 @@ public class FileController {
             // 将上传的文件保存到目标文件中
             file.transferTo(dest);
             // 返回相对路径
-            return new OperateResult(200, "上传成功", "/StaticFiles/" + fileName);
+            return new OperateResult(200, "上传成功",  rootPath + "\\StaticFiles\\" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
