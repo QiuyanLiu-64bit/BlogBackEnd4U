@@ -101,17 +101,19 @@ public class ArticleController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(Article article){
-        String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
-        //准备占位符的参数
-        Object[] args = {article.getA_tabloid(),article.getA_content(),article.getA_tags(),article.getA_title(),article.getA_create_time(),article.getA_deliver_time(),article.getA_update_time(),article.getA_cover_url(),article.getA_id()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据修改成功",null) ;
-        }else{
-            return new OperateResult(500,"数据修改失败",null) ;
+    public OperateResult update(@RequestBody Article article) {
+            String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
+            //准备占位符的参数
+            Object[] args = {article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), article.getA_create_time(), article.getA_deliver_time(), article.getA_update_time(), article.getA_cover_url(), article.getA_id()};
+            int num = jdbcTemplate.update(sql, args);
+            if (num > 0) {
+                return new OperateResult(200, "数据修改成功", null);
+            } else {
+                return new OperateResult(500, "数据修改失败", null);
+            }
         }
-    }
+
+
     @ApiOperation(value = "添加文章数据",
             protocols = "http",
             httpMethod="POST",
