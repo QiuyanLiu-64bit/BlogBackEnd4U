@@ -1,8 +1,7 @@
-package com.cqucs.blogbackend.Controller;
+package com.cqucs.blogbackend.controller;
 
 
 import com.cqucs.blogbackend.entity.Article;
-import com.cqucs.blogbackend.entity.User;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

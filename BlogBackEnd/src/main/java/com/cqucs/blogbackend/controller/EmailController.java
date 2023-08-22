@@ -1,12 +1,13 @@
-package com.cqucs.blogbackend.Controller;
+package com.cqucs.blogbackend.controller;
 
-import com.cqucs.blogbackend.Configuration.bean.EmailBean;
+import com.cqucs.blogbackend.configuration.bean.EmailBean;
 import com.cqucs.blogbackend.entity.VerificationCode;
 import com.cqucs.blogbackend.tools.OperateResult;
 import com.cqucs.blogbackend.util.CodeGeneratorUtil;
 import com.cqucs.blogbackend.util.EmailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -62,9 +63,10 @@ public class EmailController {
             consumes="application/json",
             response= OperateResult.class,
             notes = "code:200 表示成功")
-    @PostMapping("/sendEmail/{email}")
+    @PostMapping("/sendEmail")
 
-    public OperateResult SendEmail(@PathVariable String email) {
+    public OperateResult SendEmail(@ApiParam(name = "email",value = "邮箱地址",required = true)
+                                       @RequestParam String email) {
         try {
             Context context = new Context();
             context.setVariable("project", "博客项目");
@@ -99,8 +101,9 @@ public class EmailController {
             consumes="application/json",
             response= OperateResult.class,
             notes = "code:200 表示成功")
-    @PostMapping("/{email}/verifycode")
-    public OperateResult VerifyCode(@PathVariable String email,String authCode) {
+    @PostMapping("/verifycode")
+    public OperateResult VerifyCode(@ApiParam(name = "email",value = "输入邮箱地址",required = true) @RequestParam String email,
+                                    @ApiParam(name = "authCode",value = "输入验证码",required = true) @RequestParam String authCode) {
         try {
             String sql = "select * from verification_codes where email = ?";
             List<VerificationCode> Coder = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(VerificationCode.class),email);
