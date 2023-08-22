@@ -33,7 +33,7 @@ public class ArticleController {
     @GetMapping("/getarticle/{a_id}")
     public OperateResult getById(@PathVariable Integer a_id){
         try {
-            String sql = "select * from articles where a_id=?";
+            String sql = "select * from articles where a_id=? and a_deliver_time <= NOW()";
             Article article = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Article.class),a_id);
             return new OperateResult(200, "数据查询成功", article);
         }catch(Exception e){//Exception是所有异常的父类
@@ -50,7 +50,7 @@ public class ArticleController {
     @GetMapping("/getarticlebyuid/{u_id}")
     public OperateResult getByUid(@PathVariable Integer u_id){
         try {
-            String sql = "select * from articles where u_id=?";
+            String sql = "select * from articles where u_id=? and a_deliver_time <= NOW()";
             List<Article> articles = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),u_id);
             return new OperateResult(200, "数据查询成功", articles);
         }catch(Exception e){//Exception是所有异常的父类
@@ -59,7 +59,7 @@ public class ArticleController {
     }
 
 
-    @ApiOperation(value = "查询所有文章信息",
+    @ApiOperation(value = "查询所有已发布文章信息",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
@@ -68,7 +68,7 @@ public class ArticleController {
     @GetMapping("/list")
     public OperateResult queryAll(){
         try {
-            String sql = "select * from articles";
+            String sql = "select * from articles where a_deliver_time <= NOW()";
             List<Article> articles = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Article.class));
             return new OperateResult(200, "数据查询成功", articles);
         }catch(Exception e){//Exception是所有异常的父类
@@ -349,7 +349,7 @@ public class ArticleController {
     @GetMapping("/search")
     public OperateResult search(@ApiParam(name = "keyword",value = "输入关键词",required = true) @RequestParam  String keyword){
         try {
-            String sql = "select * from `articles` where MATCH(`a_title`,`a_content`) AGAINST (? IN NATURAL LANGUAGE MODE);";
+            String sql = "select * from `articles` where MATCH(`a_title`,`a_content`) AGAINST (? IN NATURAL LANGUAGE MODE) and a_deliver_time <= NOW();";
             List<Article> articles = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Article.class),keyword);
             return new OperateResult(200, "搜索成功", articles);
         }catch(Exception e){//Exception是所有异常的父类
