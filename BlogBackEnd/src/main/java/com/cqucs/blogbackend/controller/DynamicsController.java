@@ -99,11 +99,29 @@ public class DynamicsController {
             consumes="application/json",
             response= OperateResult.class,
             notes = "根据动态ID查询动态详细信息: code:200 表示成功")
-    @GetMapping("/getdynamic/{d_id}")
-    public OperateResult getById(@PathVariable Integer d_id){
+    @GetMapping("/getdynamicbyd/{d_id}")
+    public OperateResult getByD(@PathVariable Integer d_id){
         try {
             String sql = "select * from dynamics where d_id = ?";
             Dynamics dynamic = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Dynamics.class),d_id);
+            return new OperateResult(200, "动态数据查询成功", dynamic);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"动态数据查询失败",null);
+        }
+    }
+
+    @ApiOperation(value = "根据用户ID查询动态详细信息",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response= OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getdynamicbyu/{u_id}")
+    public OperateResult getByU(@PathVariable Integer u_id){
+        try {
+            String sql = "select * from dynamics where u_id = ?";
+            List<Dynamics> dynamic = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Dynamics.class),u_id);
             return new OperateResult(200, "动态数据查询成功", dynamic);
         }catch (Exception e){
             e.printStackTrace();
