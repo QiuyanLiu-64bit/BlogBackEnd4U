@@ -394,4 +394,20 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation(value = "根据用户id查询关注的用户的文章信息",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getmessage/{u_id}")
+    public OperateResult getmessage(@PathVariable String u_id){
+        try {
+            String sql = "select articles.* from articles inner join (SELECT * FROM follow WHERE u_id = ?) as f on articles.u_id = f.use_u_id";
+            List<Article> message = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),u_id);
+            return new OperateResult(200, "数据查询成功", message);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"数据查询失败",null);
+        }
+    }
 }
