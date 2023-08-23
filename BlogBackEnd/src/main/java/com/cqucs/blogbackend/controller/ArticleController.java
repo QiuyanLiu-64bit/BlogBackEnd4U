@@ -415,4 +415,22 @@ public class ArticleController {
             return new OperateResult(500,"数据查询失败",null);
         }
     }
+
+    @ApiOperation(value = "根据分类ID查询该分类中所有文章信息",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response= OperateResult.class,
+            notes = "根据分类ID查询该分类中所有文章信息")
+    @GetMapping("/getarticlebycgid/{cg_id}")
+    public OperateResult getByCgid(@PathVariable Integer cg_id){
+        try {
+            String sql = "select * from articles where cg_id=? and a_deliver_time <= NOW()";
+            List<Article> articles = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),cg_id);
+            return new OperateResult(200, "数据查询成功", articles);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
 }
