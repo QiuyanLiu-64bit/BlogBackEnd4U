@@ -26,7 +26,7 @@ public class ChatController {
     /**
      * api密匙
      */
-    String apiKey = "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";
+    String apiKey = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     /**
      * 发送消息
