@@ -15,4 +15,7 @@ public class Categories {
 
     @ApiModelProperty(value = "分类名称")
     private String cg_name;
+
+    @ApiModelProperty(value = "分类图片")
+    private String cg_img;
 }
