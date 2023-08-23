@@ -16,6 +16,6 @@ public class CategoriesRateVO {
     @ApiModelProperty(value = "分类名称")
     private String cg_name;
 
-    @ApiModelProperty(value = "总点赞量")
-    private double total_likes;
+    @ApiModelProperty(value = "浏览量")
+    private double like_to_read_ratio;
 }

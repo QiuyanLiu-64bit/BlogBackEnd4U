@@ -16,6 +16,6 @@ public class CategoriesNumVO {
     @ApiModelProperty(value = "分类名称")
     private String cg_name;
 
-    @ApiModelProperty(value = "总点赞量")
+    @ApiModelProperty(value = "总文章量")
     private Integer total_articles;
 }
