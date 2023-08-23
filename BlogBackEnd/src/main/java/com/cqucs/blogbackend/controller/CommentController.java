@@ -103,13 +103,12 @@ public class CommentController {
             notes = "code:200 表示成功")
     @PutMapping("/update")
     public OperateResult update(CommentUDTO comment){
+        try{
         String sql = "update comments set c_time=NOW(),c_content=? where c_id=?";
-        //准备占位符的参数
         Object[] args = {comment.getC_content(),comment.getC_id()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据修改成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据修改成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据修改失败",null) ;
         }
     }
@@ -121,18 +120,12 @@ public class CommentController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody CommentCDTO comment){
-        //将从前端接受的数据保存到数据库中
-        //如下SQL语句可能会造成SQL注入问题
-        //String sql = "insert into users values(default,'赵敏','zhaomin','123456',20,0)";
-        //int num = jdbcTemplate.update(sql);
-        //使用占位符的方式去编写SQL语句
+        try{
         String sql = "insert into comments values(default,?,?,NOW(),?)";
-        //准备占位符的参数
         Object[] args = {comment.getU_id(),comment.getA_id(),comment.getC_content()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据添加成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据添加成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据添加失败",null) ;
         }
     }
