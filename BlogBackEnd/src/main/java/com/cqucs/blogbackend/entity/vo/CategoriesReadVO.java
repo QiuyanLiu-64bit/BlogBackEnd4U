@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriesComVO {
+public class CategoriesReadVO {
 
     @ApiModelProperty(value = "分类编号")
     private Integer cg_id;
@@ -16,6 +16,6 @@ public class CategoriesComVO {
     @ApiModelProperty(value = "分类名称")
     private String cg_name;
 
-    @ApiModelProperty(value = "总评论量")
-    private Integer total_comments;
+    @ApiModelProperty(value = "总点赞量")
+    private Integer total_browses;
 }

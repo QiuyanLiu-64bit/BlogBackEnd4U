@@ -3,10 +3,7 @@ package com.cqucs.blogbackend.controller;
 
 import com.cqucs.blogbackend.entity.Article;
 import com.cqucs.blogbackend.entity.Categories;
-import com.cqucs.blogbackend.entity.vo.CategoriesComVO;
-import com.cqucs.blogbackend.entity.vo.CategoriesLikeVO;
-import com.cqucs.blogbackend.entity.vo.CategoriesNumVO;
-import com.cqucs.blogbackend.entity.vo.CategoriesRateVO;
+import com.cqucs.blogbackend.entity.vo.*;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +35,7 @@ public class CategoriesController {
             String sql = "select a.* " +
                     "from articles a " +
                     "join categories c " +
-                    "on a.cg_id = c.cg_id ";
+                    "on a.cg_id = ? ";
             List<Article> category = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),cg_id);
             return new OperateResult(200, "数据查询成功", category);
         }catch(Exception e){//Exception是所有异常的父类
@@ -181,10 +178,14 @@ public class CategoriesController {
     @GetMapping("/getthumbsuprate")
     public OperateResult getThumbsUpRate(){
         try {
-            String sql = "SELECT c.cg_id, c.cg_name, COUNT(al.u_id) / COUNT(a.a_id) AS total_likes_rate\n" +
+            String sql = "SELECT c.cg_id, c.cg_name,\n" +
+                    "       IFNULL(SUM(al.u_id IS NOT NULL), 0) AS total_likes,\n" +
+                    "       IFNULL(COUNT(ra.v_id), 0) AS total_reads,\n" +
+                    "       IFNULL(SUM(al.u_id IS NOT NULL) / COUNT(ra.v_id), 0) AS like_to_read_ratio\n" +
                     "FROM categories c\n" +
                     "LEFT JOIN articles a ON c.cg_id = a.cg_id\n" +
                     "LEFT JOIN article_likes al ON a.a_id = al.a_id\n" +
+                    "LEFT JOIN read_article ra ON a.a_id = ra.a_id\n" +
                     "GROUP BY c.cg_id, c.cg_name;\n";
             List<CategoriesRateVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesRateVO.class));
             return new OperateResult(200, "数据查询成功", categories);
@@ -225,12 +226,34 @@ public class CategoriesController {
     @GetMapping("/getcollect")
     public OperateResult getCollect(){
         try {
-            String sql = "SELECT cg.cg_id, cg.cg_name, COUNT(af.c_id) AS total_collects\n" +
+            String sql = "SELECT cg.cg_id, cg.cg_name, COUNT(af.u_id) AS total_collects\n" +
                     "FROM categories cg\n" +
                     "LEFT JOIN articles a ON cg.cg_id = a.cg_id\n" +
                     "LEFT JOIN article_favorites af ON a.a_id = af.a_id\n" +
                     "GROUP BY cg.cg_id, cg.cg_name;\n";
-            List<CategoriesComVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesComVO.class));
+            List<CategoriesColleVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesColleVO.class));
+            return new OperateResult(200, "数据查询成功", categories);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "查询每个类下的浏览量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getbrowse")
+    public OperateResult getBrowse(){
+        try {
+            String sql = "SELECT cg.cg_id, cg.cg_name, COUNT(ra.u_id) AS total_browses\n" +
+                    "FROM categories cg\n" +
+                    "LEFT JOIN articles a ON cg.cg_id = a.cg_id\n" +
+                    "LEFT JOIN read_article ra ON a.a_id = ra.a_id\n" +
+                    "GROUP BY cg.cg_id, cg.cg_name;\n";
+            List<CategoriesReadVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesReadVO.class));
             return new OperateResult(200, "数据查询成功", categories);
         }catch(Exception e){//Exception是所有异常的父类
             e.printStackTrace();
