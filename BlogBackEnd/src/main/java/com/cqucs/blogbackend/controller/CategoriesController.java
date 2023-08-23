@@ -1,6 +1,7 @@
 package com.cqucs.blogbackend.controller;
 
 
+import com.cqucs.blogbackend.entity.Article;
 import com.cqucs.blogbackend.entity.Categories;
 import com.cqucs.blogbackend.entity.vo.CategoriesComVO;
 import com.cqucs.blogbackend.entity.vo.CategoriesLikeVO;
@@ -25,17 +26,20 @@ public class CategoriesController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @ApiOperation(value = "根据分类ID查询分类详细信息",
+    @ApiOperation(value = "根据分类ID查询文章详细信息",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
             response= OperateResult.class,
-            notes = "根据分类ID查询分类详细信息")
+            notes = "code:200 表示成功")
     @GetMapping("/getcategory/{cg_id}")
     public OperateResult getById(@PathVariable Integer cg_id){
         try {
-            String sql = "select * from categories where cg_id=?";
-            Categories category = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Categories.class),cg_id);
+            String sql = "select a.* " +
+                    "from articles a " +
+                    "join categories c " +
+                    "on a.cg_id = c.cg_id ";
+            List<Article> category = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),cg_id);
             return new OperateResult(200, "数据查询成功", category);
         }catch(Exception e){//Exception是所有异常的父类
             e.printStackTrace();
@@ -136,6 +140,7 @@ public class CategoriesController {
             String sql = "SELECT c.cg_id, c.cg_name, COUNT(a.a_id) AS total_articles\n" +
                     "FROM categories c\n" +
                     "LEFT JOIN articles a ON c.cg_id = a.cg_id\n" +
+                    "WHERE a.a_deliver_time <= NOW()\n"+
                     "GROUP BY c.cg_id, c.cg_name;\n";
             List<CategoriesNumVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesNumVO.class));
             return new OperateResult(200, "数据查询成功", categories);
