@@ -214,9 +214,9 @@ public class UserController {
         try{
             String sql = "delete from follow where u_id=? and use_u_id=?";
             jdbcTemplate.update(sql,u_id,use_u_id);
-            return new OperateResult(200,"数据删除成功",null) ;
+            return new OperateResult(200,"取消关注成功",null) ;
         }catch(Exception e){
-            return new OperateResult(500,"数据删除失败",null) ;
+            return new OperateResult(500,"取消关注失败",null) ;
         }
 
     }
