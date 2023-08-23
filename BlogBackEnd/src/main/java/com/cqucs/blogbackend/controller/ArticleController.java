@@ -107,16 +107,20 @@ public class ArticleController {
             notes = "code:200 表示成功")
     @PutMapping("/update")
     public OperateResult update(@RequestBody Article article) {
+        try{
             String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
             //准备占位符的参数
             Object[] args = {article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), article.getA_create_time(), article.getA_deliver_time(), article.getA_update_time(), article.getA_cover_url(), article.getA_id()};
-            int num = jdbcTemplate.update(sql, args);
-            if (num > 0) {
-                return new OperateResult(200, "数据修改成功", null);
-            } else {
-                return new OperateResult(500, "数据修改失败", null);
-            }
+            jdbcTemplate.update(sql, args);
+            return new OperateResult(200, "数据修改成功", null);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"数据修改失败",null);
         }
+    }
+
+
+
 
 
     @ApiOperation(value = "添加文章数据",
@@ -157,12 +161,13 @@ public class ArticleController {
     @PostMapping("/addcollect")
     public OperateResult addcollect(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
                                     @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        try{
         String sql = "insert into article_favorites values(?,?)";
         Object[] args = {u_id,a_id};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"收藏成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"收藏成功",null) ;
+        }catch (Exception e){
+            e.printStackTrace();
             return new OperateResult(500,"收藏失败",null) ;
         }
     }
@@ -200,12 +205,13 @@ public class ArticleController {
     @DeleteMapping("/deletecollect/{u_id}/{a_id}")
     public OperateResult deletecollect(@ApiParam(name="u_id",value="用户ID",required = true) @PathVariable String u_id,
                                        @ApiParam(name="a_id",value="文章ID", required = true) @PathVariable String a_id){
+        try{
         String sql = "delete from article_favorites where u_id=? and a_id=?";
         Object[] args = {u_id,a_id};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"取消收藏成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"取消收藏成功",null) ;
+        }catch (Exception e){
+            e.printStackTrace();
             return new OperateResult(500,"取消收藏失败",null) ;
         }
     }
@@ -256,12 +262,12 @@ public class ArticleController {
     @PostMapping("/addlike")
     public OperateResult addlike(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
                                  @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        try{
         String sql = "insert into article_likes values(?,?)";
         Object[] args = {u_id,a_id};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"点赞成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"点赞成功",null) ;
+        }catch (Exception e){
             return new OperateResult(500,"点赞失败",null) ;
         }
     }
@@ -299,12 +305,13 @@ public class ArticleController {
     @DeleteMapping("/deletelike")
     public OperateResult deletelike(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
                                     @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+        try{
         String sql = "delete from article_likes where u_id=? and a_id=?";
         Object[] args = {u_id,a_id};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"取消点赞成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"取消点赞成功",null) ;
+        }catch (Exception e){
+            e.printStackTrace();
             return new OperateResult(500,"取消点赞失败",null) ;
         }
     }
@@ -371,13 +378,12 @@ public class ArticleController {
     @PutMapping("/addviews")
     public OperateResult addviews(@ApiParam(name = "a_id",value = "输入文章ID",required = true) @RequestParam  String a_id,
                                   @ApiParam(name = "u_id",value = "输入用户ID",required = true) @RequestParam  String u_id){
+        try{
         String sql = "insert into read_article values(default, ?, ?, NOW())";
-        //准备占位符的参数
         Object[] args = {u_id,a_id};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"阅读量+1",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"阅读量+1",null) ;
+        }catch (Exception e){
             return new OperateResult(500,"阅读量+1失败",null) ;
         }
     }

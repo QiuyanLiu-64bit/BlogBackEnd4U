@@ -112,12 +112,12 @@ public class UserController {
             notes = "code:200 表示成功")
     @PutMapping("/update")
     public OperateResult update(@RequestBody User user){
+        try{
         String sql = "update users set u_nickname=?,u_gender=?,u_birth_date=?,u_register_date=?,u_signature=?,u_avatar_url=?,u_email=?,u_password=?,u_type=? where u_id=?";
         Object[] args = {user.getU_nickname(),user.getU_gender(),user.getU_birth_date(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url(),user.getU_email(),user.getU_password(),user.getU_type(),user.getU_id()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据修改成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据修改成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据修改失败",null) ;
         }
     }
@@ -131,12 +131,12 @@ public class UserController {
     @PutMapping("/updatepassword")
     public OperateResult updatePassword(@ApiParam(name="u_email",value="用户邮箱",required = true) String u_email,
                                         @ApiParam(name="u_password",value="用户密码", required = true) String u_password){
+        try{
         String sql = "update users set u_password=? where u_email=?";
         Object[] args = {u_password,u_email};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据修改成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据修改成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据修改失败",null) ;
         }
     }
@@ -149,12 +149,12 @@ public class UserController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody UserDTO user){
+        try{
         String sql = "insert into users values(default,?,?,?,?,?,Null,NOW(),?,?)";
         Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_gender(),user.getU_signature(),user.getU_avatar_url()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据添加成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据添加成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据添加失败",null) ;
         }
     }
@@ -192,12 +192,12 @@ public class UserController {
             notes = "code:200 表示成功")
     @PostMapping("/follow")
     public OperateResult follow(@RequestBody Follow follow){
+        try{
         String sql = "insert into follow values(?,?)";
         Object[] args = {follow.getU_id(),follow.getUse_u_id()};
-        int num = jdbcTemplate.update(sql,args);
-        if(num>0){
-            return new OperateResult(200,"数据添加成功",null) ;
-        }else{
+        jdbcTemplate.update(sql,args);
+        return new OperateResult(200,"数据添加成功",null) ;
+        }catch(Exception e){
             return new OperateResult(500,"数据添加失败",null) ;
         }
     }
