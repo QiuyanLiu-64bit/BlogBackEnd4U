@@ -213,7 +213,8 @@ public class UserController {
     public OperateResult unfollow(@PathVariable Integer use_u_id,Integer u_id){
         try{
             String sql = "delete from follow where u_id=? and use_u_id=?";
-            jdbcTemplate.update(sql,u_id,use_u_id);
+            Object[] args = {u_id,use_u_id};
+            jdbcTemplate.update(sql,args);
             return new OperateResult(200,"取消关注成功",null) ;
         }catch(Exception e){
             return new OperateResult(500,"取消关注失败",null) ;
