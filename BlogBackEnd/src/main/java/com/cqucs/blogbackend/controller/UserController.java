@@ -149,8 +149,8 @@ public class UserController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody UserDTO user){
-        String sql = "insert into users values(default,?,?,?,?,?,Null,?,?,?)";
-        Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_gender(),user.getU_register_date(),user.getU_signature(),user.getU_avatar_url()};
+        String sql = "insert into users values(default,?,?,?,?,?,Null,NOW(),?,?)";
+        Object[] args = {user.getU_email(),user.getU_password(),user.getU_type(),user.getU_nickname(),user.getU_gender(),user.getU_signature(),user.getU_avatar_url()};
         int num = jdbcTemplate.update(sql,args);
         if(num>0){
             return new OperateResult(200,"数据添加成功",null) ;

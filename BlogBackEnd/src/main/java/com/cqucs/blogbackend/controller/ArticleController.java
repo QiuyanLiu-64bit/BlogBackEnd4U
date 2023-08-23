@@ -29,7 +29,7 @@ public class ArticleController {
             httpMethod="GET",
             consumes="application/json",
             response= OperateResult.class,
-            notes = "根据用户ID查询用户详细信息")
+            notes = "根据文章ID查询文章详细信息")
     @GetMapping("/getarticle/{a_id}")
     public OperateResult getById(@PathVariable Integer a_id){
         try {

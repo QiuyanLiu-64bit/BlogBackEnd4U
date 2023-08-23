@@ -16,8 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleDTO {
-    @ApiModelProperty(value = "文章编号")
-    private Integer a_id;
 
     @ApiModelProperty(value = "用户编号")
     private Integer u_id;

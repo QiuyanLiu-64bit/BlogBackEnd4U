@@ -34,10 +34,6 @@ public class UserDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date u_birth_date;
 
-    @ApiModelProperty(value = "用户注册日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date u_register_date;
-
     @ApiModelProperty(value = "用户个性签名")
     private String u_signature;
 
