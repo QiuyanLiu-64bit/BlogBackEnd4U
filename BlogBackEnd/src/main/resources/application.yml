@@ -10,6 +10,9 @@ spring:
 #    add-mappings: false
   profiles:
     active: dev
+  jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
 #  application:
 #    name: qblog-server
 #logging:

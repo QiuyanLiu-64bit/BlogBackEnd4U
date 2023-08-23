@@ -127,23 +127,23 @@ public class ArticleController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody ArticleDTO article) {
-        LocalDateTime deliverTime = article.getA_deliver_time();
-        LocalDateTime anotherTime = LocalDateTime.now();
-        System.out.println(anotherTime);
+        try {
+            LocalDateTime deliverTime = article.getA_deliver_time();
+            LocalDateTime anotherTime = LocalDateTime.now();
+            System.out.println(anotherTime);
 
-        if (deliverTime == null) {
-            deliverTime = LocalDateTime.now();
-        }
+            if (deliverTime == null) {
+                deliverTime = LocalDateTime.now();
+            }
 
-        String sql = "insert into articles values(default,?,?,?,?,?,?,NOW(),?,NOW(),?)";
-        // 准备占位符的参数
-        Object[] args = {article.getU_id(), article.getCg_id(), article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), deliverTime, article.getA_cover_url()};
-        int num = jdbcTemplate.update(sql, args);
-
-        if (num > 0) {
+            String sql = "insert into articles values(default,?,?,?,?,?,?,NOW(),?,NOW(),?)";
+            // 准备占位符的参数
+            Object[] args = {article.getU_id(), article.getCg_id(), article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), deliverTime, article.getA_cover_url()};
+            jdbcTemplate.update(sql, args);
             return new OperateResult(200, "数据添加成功", null);
-        } else {
-            return new OperateResult(500, "数据添加失败", null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new OperateResult(500,"数据添加失败",null);
         }
     }
 
