@@ -174,9 +174,9 @@ public class UserController {
             if(password.equals(user.getU_password()))
                 return new OperateResult(200, "登录成功", user);
             else
-                return new OperateResult(200,"密码错误",null);
+                return new OperateResult(510,"密码错误",null);
         }catch (EmptyResultDataAccessException e){
-            return new OperateResult(200,"用户不存在",null);
+            return new OperateResult(506,"用户不存在",null);
         }catch (Exception e){
             e.printStackTrace();
             return new OperateResult(500,"登录失败",null);
