@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
+public class CommentUDTO {
+    @ApiModelProperty(value = "评论编号")
+    private Integer c_id;
+
     @ApiModelProperty(value = "用户编号")
     private Integer u_id;
 

@@ -1,6 +1,7 @@
 package com.cqucs.blogbackend.controller;
 
 
+import cn.hutool.core.date.DateTime;
 import com.cqucs.blogbackend.entity.Article;
 import com.cqucs.blogbackend.entity.dto.ArticleDTO;
 import com.cqucs.blogbackend.tools.OperateResult;
@@ -13,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = "文章模块")
@@ -124,10 +127,12 @@ public class ArticleController {
             notes = "code:200 表示成功")
     @PostMapping("/create")
     public OperateResult create(@RequestBody ArticleDTO article) {
-        Timestamp deliverTime = article.getA_deliver_time();
+        LocalDateTime deliverTime = article.getA_deliver_time();
+        LocalDateTime anotherTime = LocalDateTime.now();
+        System.out.println(anotherTime);
 
         if (deliverTime == null) {
-            deliverTime = new Timestamp(System.currentTimeMillis());
+            deliverTime = LocalDateTime.now();
         }
 
         String sql = "insert into articles values(default,?,?,?,?,?,?,NOW(),?,NOW(),?)";
@@ -192,9 +197,9 @@ public class ArticleController {
             consumes="application/json",
             response=OperateResult.class,
             notes = "code:200 表示成功")
-    @DeleteMapping("/deletecollect")
-    public OperateResult deletecollect(@ApiParam(name="u_id",value="用户ID",required = true) String u_id,
-                                       @ApiParam(name="a_id",value="文章ID", required = true) String a_id){
+    @DeleteMapping("/deletecollect/{u_id}/{a_id}")
+    public OperateResult deletecollect(@ApiParam(name="u_id",value="用户ID",required = true) @PathVariable String u_id,
+                                       @ApiParam(name="a_id",value="文章ID", required = true) @PathVariable String a_id){
         String sql = "delete from article_favorites where u_id=? and a_id=?";
         Object[] args = {u_id,a_id};
         int num = jdbcTemplate.update(sql,args);
