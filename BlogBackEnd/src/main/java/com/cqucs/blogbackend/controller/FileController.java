@@ -72,24 +72,24 @@ public class FileController {
     @ApiOperation(value = "文件下载",
             protocols = "http",
             httpMethod = "GET",
-            consumes = "application/octet-stream",
+            /*consumes = "application/octet-stream",*/
             response = OperateResult.class,
             notes = "code:200 表示成功")
     // 处理上传文件的请求
-    @GetMapping("/download")
-    public void downloadFile(@ApiParam(name = "fileName", value = "输入文件名", required = true) @RequestParam String fileName,
-                                      @ApiIgnore HttpServletResponse response) {
+    /**
+     * @param path     想要下载的文件的路径
+     * @param response
+     * @功能描述 下载文件:
+     */
+    @RequestMapping("/download")
+    public void download(@ApiParam(name = "fileName", value = "输入文件名", required = true) @RequestParam String fileName,
+                         @ApiIgnore HttpServletResponse response) {
         try {
             // 构建文件完整路径
             String dir = rootPath + "\\staticFiles\\";
             String filePath = dir + fileName;
 
             File file = new File(filePath);
-
-            /*if (!file.exists()) {
-                // 文件不存在，返回错误响应或其他处理
-//                return new OperateResult(500, "文件不存在", null);
-            }*/
             log.info(file.getPath());
             // 获取文件名
             String filename = file.getName();
@@ -118,12 +118,9 @@ public class FileController {
             response.setContentType("application/octet-stream");
             outputStream.write(buffer);
             outputStream.flush();
-//            return new OperateResult(200, "下载成功", null);
         } catch (IOException ex) {
             ex.printStackTrace();
-//            return new OperateResult(500, "下载失败", null);
-//            return ResponseEntity.ok("No!");
         }
-//        return new OperateResult(500, "下载失败", null);
     }
+
 }
