@@ -29,7 +29,7 @@ public class DynamicsController {
     @PostMapping("/create")
     public OperateResult create(@RequestBody DynamicsDTO dynamic){
         try {
-            String sql = "insert into dynamics VALUES(default,?,?,NOW(),?,?,?,?)";
+            String sql = "insert into dynamics VALUES(default,?,NOW(),?,?,?,?,?)";
             Object[] args = {dynamic.getU_id(), dynamic.getD_content(), dynamic.getD_image1(), dynamic.getD_image2(), dynamic.getD_image3(), dynamic.getD_image4()};
             jdbcTemplate.update(sql, args);
             return new OperateResult(200, "动态数据添加成功", null);
