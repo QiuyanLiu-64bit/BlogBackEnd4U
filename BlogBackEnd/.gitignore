@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /log/qblog.log
+/src/main/java/com/cqucs/blogbackend/test/
