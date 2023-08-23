@@ -3,6 +3,7 @@ package com.cqucs.blogbackend.controller;
 import com.cqucs.blogbackend.entity.dto.UserDTO;
 import com.cqucs.blogbackend.entity.Follow;
 import com.cqucs.blogbackend.entity.User;
+import com.cqucs.blogbackend.entity.vo.UserDVO;
 import com.cqucs.blogbackend.entity.vo.UserVO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
@@ -240,7 +241,7 @@ public class UserController {
                     "FROM follow f\n" +
                     "JOIN users u ON f.use_u_id = u.u_id\n" +
                     "WHERE f.u_id = ?;\n";
-            List<UserVO> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(UserVO.class),u_id);
+            List<UserDVO> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(UserDVO.class),u_id);
             return new OperateResult(200, "数据查询成功", follows);
         }catch(Exception e){//Exception是所有异常的父类
             e.printStackTrace();
