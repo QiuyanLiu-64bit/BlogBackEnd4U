@@ -28,6 +28,9 @@ public enum CodeType {
     USERNAME_EXIST(505, "用户名已存在"),
     USERNAME_NOT_EXIST(506, "用户名不存在"),
     USERNAME_FORMAT_ERROR(507, "用户名长度过长或格式不正确"),
+    PASSWORD_BLANK(508, "密码为空"),
+    PASSWORD_FORMAT_ERROR(509, "密码长度过长或格式不正确"),
+    PASSWORD_ERROR(510, "密码错误"),
 
     ADD_FRIEND_LINK_SUCCESS(601, "添加友链成功"),
     FRIEND_LINK_EXIST(602, "友链已存在"),
