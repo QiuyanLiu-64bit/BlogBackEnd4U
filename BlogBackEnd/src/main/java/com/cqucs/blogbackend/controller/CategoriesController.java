@@ -34,7 +34,7 @@ public class CategoriesController {
         try {
             String sql = "SELECT a.* " +
                     "FROM articles a " +
-                    "WHERE a.cg_id = ?";
+                    "WHERE a.cg_id = ? and a.a_deliver_time <= NOW()";
 
             List<Article> category = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),cg_id);
             return new OperateResult(200, "数据查询成功", category);
