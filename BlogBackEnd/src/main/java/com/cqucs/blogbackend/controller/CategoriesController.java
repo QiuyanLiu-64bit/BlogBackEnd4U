@@ -32,10 +32,10 @@ public class CategoriesController {
     @GetMapping("/getcategory/{cg_id}")
     public OperateResult getById(@PathVariable Integer cg_id){
         try {
-            String sql = "select a.* " +
-                    "from articles a " +
-                    "join categories c " +
-                    "on a.cg_id = ? ";
+            String sql = "SELECT a.* " +
+                    "FROM articles a " +
+                    "WHERE a.cg_id = ?";
+
             List<Article> category = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Article.class),cg_id);
             return new OperateResult(200, "数据查询成功", category);
         }catch(Exception e){//Exception是所有异常的父类
