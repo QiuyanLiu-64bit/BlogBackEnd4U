@@ -2,6 +2,7 @@ package com.cqucs.blogbackend.controller;
 
 
 import com.cqucs.blogbackend.entity.Categories;
+import com.cqucs.blogbackend.entity.vo.CategoriesVO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -118,4 +119,24 @@ public class CategoriesController {
         }
     }
 
+    @ApiOperation(value = "查询每个类下的点赞量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getthumbsup")
+    public OperateResult getThumbsUp(){
+        try {
+            String sql = "SELECT c.cg_id, c.cg_name, COUNT(al.u_id) AS total_likes\n" +
+                    "FROM categories c\n" +
+                    "LEFT JOIN articles a ON c.cg_id = a.cg_id\n" +
+                    "LEFT JOIN article_likes al ON a.a_id = al.a_id\n" +
+                    "GROUP BY c.cg_id, c.cg_name;\n";
+            List<CategoriesVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesVO.class));
+            return new OperateResult(200, "数据查询成功", categories);
+        }catch(Exception e){//Exception是所有异常的父类
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
 }

@@ -17,4 +17,7 @@ public class UserVO {
 
     @ApiModelProperty(value = "用户头像URL")
     private String u_avatar_url;
+
+    @ApiModelProperty(value = "被关注用户的u_id")
+    private String use_u_id;
 }

@@ -221,7 +221,7 @@ public class UserController {
 
     }
 
-    @ApiOperation(value = "查询关注列表",
+    @ApiOperation(value = "查询我关注的用户列表",
             protocols = "http",
             httpMethod="GET",
             consumes="application/json",
@@ -230,13 +230,14 @@ public class UserController {
     @GetMapping("/followlist/{u_id}")
     public OperateResult followlist(@PathVariable Integer u_id){
         try {
-            String sql = "SELECT u.u_avatar_url, u.u_nickname\n" +
+            String sql = "SELECT u.u_avatar_url, u.u_nickname, f.use_u_id\n" +
                     "FROM follow f\n" +
                     "JOIN users u ON f.use_u_id = u.u_id\n" +
                     "WHERE f.u_id = ?;\n";
             List<UserVO> follows = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(UserVO.class),u_id);
             return new OperateResult(200, "数据查询成功", follows);
         }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
             return new OperateResult(500,"查询数据失败",null);
         }
     }
