@@ -2,7 +2,8 @@ package com.cqucs.blogbackend.controller;
 
 
 import com.cqucs.blogbackend.entity.Categories;
-import com.cqucs.blogbackend.entity.vo.CategoriesVO;
+import com.cqucs.blogbackend.entity.vo.CategoriesComVO;
+import com.cqucs.blogbackend.entity.vo.CategoriesLikeVO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,7 @@ public class CategoriesController {
             Categories category = jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(Categories.class),cg_id);
             return new OperateResult(200, "数据查询成功", category);
         }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
             return new OperateResult(500,"查询数据失败",null);
         }
     }
@@ -53,6 +55,7 @@ public class CategoriesController {
             List<Categories> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Categories.class));
             return new OperateResult(200, "数据查询成功", categories);
         }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
             return new OperateResult(500,"查询数据失败",null);
         }
     }
@@ -133,9 +136,76 @@ public class CategoriesController {
                     "LEFT JOIN articles a ON c.cg_id = a.cg_id\n" +
                     "LEFT JOIN article_likes al ON a.a_id = al.a_id\n" +
                     "GROUP BY c.cg_id, c.cg_name;\n";
-            List<CategoriesVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesVO.class));
+            List<CategoriesLikeVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesLikeVO.class));
             return new OperateResult(200, "数据查询成功", categories);
         }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "查询每个类下的点赞率",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getthumbsuprate")
+    public OperateResult getThumbsUpRate(){
+        try {
+            String sql = "SELECT c.cg_id, c.cg_name, COUNT(al.u_id) / COUNT(a.a_id) AS total_likes_rate\n" +
+                    "FROM categories c\n" +
+                    "LEFT JOIN articles a ON c.cg_id = a.cg_id\n" +
+                    "LEFT JOIN article_likes al ON a.a_id = al.a_id\n" +
+                    "GROUP BY c.cg_id, c.cg_name;\n";
+            List<CategoriesLikeVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesLikeVO.class));
+            return new OperateResult(200, "数据查询成功", categories);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "查询每个类下的评论量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getcomment")
+    public OperateResult getComment(){
+        try {
+            String sql = "SELECT cg.cg_id, cg.cg_name, COUNT(c.c_id) AS total_comments\n" +
+                    "FROM categories cg\n" +
+                    "LEFT JOIN articles a ON cg.cg_id = a.cg_id\n" +
+                    "LEFT JOIN comments c ON a.a_id = c.a_id\n" +
+                    "GROUP BY cg.cg_id, cg.cg_name;\n";
+            List<CategoriesComVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesComVO.class));
+            return new OperateResult(200, "数据查询成功", categories);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
+
+    @ApiOperation(value = "查询每个类下的收藏量",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/getcollect")
+    public OperateResult getCollect(){
+        try {
+            String sql = "SELECT cg.cg_id, cg.cg_name, COUNT(af.c_id) AS total_collects\n" +
+                    "FROM categories cg\n" +
+                    "LEFT JOIN articles a ON cg.cg_id = a.cg_id\n" +
+                    "LEFT JOIN article_favorites af ON a.a_id = af.a_id\n" +
+                    "GROUP BY cg.cg_id, cg.cg_name;\n";
+            List<CategoriesComVO> categories = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CategoriesComVO.class));
+            return new OperateResult(200, "数据查询成功", categories);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
             return new OperateResult(500,"查询数据失败",null);
         }
     }
