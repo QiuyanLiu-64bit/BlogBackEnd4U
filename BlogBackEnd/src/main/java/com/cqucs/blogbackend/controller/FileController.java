@@ -91,14 +91,33 @@ public class FileController {
      * @param response
      * @功能描述 下载文件:
      */
-    @GetMapping("/download")
-    public ResponseEntity<InputStreamResource> download(@ApiParam(name = "fileName", value = "输入文件名", required = true) @RequestParam String fileName) throws Exception {
-        String dir = rootPath + "\\staticFiles\\";
-        String filePath = dir + fileName;
-        InputStreamResource isr = new InputStreamResource(new FileInputStream(filePath));
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-disposition", "attachment; filename=test1.png")
-                .body(isr);
+    @RequestMapping("/download")
+    public String fileDownLoad(HttpServletResponse response, @RequestParam("fileName") String fileName){
+        //76843d45-94c2-481b-b88c-ba2630664f66.jpg
+        //http://localhost:8888/file/download?fileName=76843d45-94c2-481b-b88c-ba2630664f66.jpg
+        /*System.out.println(rootPath +'\\'+"staticFiles"+'\\'+ fileName);*/  //winwdows为\\
+        File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/
+        if(!file.exists()){
+            return "下载文件不存在";
+        }
+        response.reset();
+        response.setContentType("application/octet-stream");
+        response.setCharacterEncoding("utf-8");
+        response.setContentLength((int) file.length());
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName );
+
+        try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));) {
+            byte[] buff = new byte[1024];
+            OutputStream os  = response.getOutputStream();
+            int i = 0;
+            while ((i = bis.read(buff)) != -1) {
+                os.write(buff, 0, i);
+                os.flush();
+            }
+        } catch (IOException e) {
+            log.error("{}",e);
+            return "下载失败";
+        }
+        return "下载成功";
     }
 }
