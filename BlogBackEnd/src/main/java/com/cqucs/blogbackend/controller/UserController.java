@@ -269,4 +269,26 @@ public class UserController {
             return new OperateResult(500,"查询数据失败",null);
         }
     }
+
+    @ApiOperation(value = "查询该用户是否已被关注",
+            protocols = "http",
+            httpMethod="GET",
+            consumes="application/json",
+            response=OperateResult.class,
+            notes = "code:200 表示成功")
+    @GetMapping("/isfollowed")
+    public OperateResult isfollowed(@ApiParam(name="u_id",value="用户id",required = true) Integer u_id,
+                                    @ApiParam(name="use_u_id",value="被关注用户id", required = true) Integer use_u_id){
+        try {
+            String sql = "select count(*) from follow where u_id=? and use_u_id=?";
+            Integer count = jdbcTemplate.queryForObject(sql,Integer.class,u_id,use_u_id);
+            if(count==0){
+                return new OperateResult(200, "未关注", false);
+            }
+            return new OperateResult(200, "已关注", true);
+        }catch(Exception e){//Exception是所有异常的父类
+            e.printStackTrace();
+            return new OperateResult(500,"查询数据失败",null);
+        }
+    }
 }
