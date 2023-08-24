@@ -1,9 +1,9 @@
 package com.cqucs.blogbackend.controller;
 
 
-import cn.hutool.core.date.DateTime;
 import com.cqucs.blogbackend.entity.Article;
 import com.cqucs.blogbackend.entity.dto.ArticleDTO;
+import com.cqucs.blogbackend.entity.dto.ArticleUDTO;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,9 +13,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Api(tags = "文章模块")
@@ -106,11 +104,11 @@ public class ArticleController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PutMapping("/update")
-    public OperateResult update(@RequestBody Article article) {
+    public OperateResult update(@RequestBody ArticleUDTO article) {
         try{
-            String sql = "update articles set a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_create_time=?,a_deliver_time=?,a_update_time=?,a_cover_url=? where a_id=?";
+            String sql = "update articles set cg_id=?,a_tabloid=?,a_content=?,a_tags=?,a_title=?,a_update_time=NOW(),a_cover_url=? where a_id=?";
             //准备占位符的参数
-            Object[] args = {article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), article.getA_create_time(), article.getA_deliver_time(), article.getA_update_time(), article.getA_cover_url(), article.getA_id()};
+            Object[] args = {article.getCg_id(),article.getA_tabloid(), article.getA_content(), article.getA_tags(), article.getA_title(), article.getA_cover_url(), article.getA_id()};
             jdbcTemplate.update(sql, args);
             return new OperateResult(200, "数据修改成功", null);
         }catch(Exception e){
