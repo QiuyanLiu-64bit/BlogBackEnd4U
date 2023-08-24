@@ -3,6 +3,7 @@ package com.cqucs.blogbackend.controller;
 
 import com.cqucs.blogbackend.entity.Article;
 import com.cqucs.blogbackend.entity.Categories;
+import com.cqucs.blogbackend.entity.dto.CategoriesDTO;
 import com.cqucs.blogbackend.entity.vo.*;
 import com.cqucs.blogbackend.tools.OperateResult;
 import io.swagger.annotations.Api;
@@ -107,10 +108,10 @@ public class CategoriesController {
             response=OperateResult.class,
             notes = "code:200 表示成功")
     @PostMapping("/create")
-    public OperateResult create(@RequestBody Categories category){
+    public OperateResult create(@RequestBody CategoriesDTO category){
         try{
-        String sql = "insert into categories values(default,?)";
-        Object[] args = {category.getCg_name()};
+        String sql = "insert into categories values(default,?,?)";
+        Object[] args = {category.getCg_name(),category.getCg_img()};
         jdbcTemplate.update(sql,args);
         return new OperateResult(200,"数据添加成功",null) ;
         }catch(Exception e){
