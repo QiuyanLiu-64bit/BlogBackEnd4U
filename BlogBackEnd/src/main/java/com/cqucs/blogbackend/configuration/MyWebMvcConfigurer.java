@@ -14,7 +14,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // PS：注意文件路径最后的斜杠（文件分隔符），如果缺少了，就不能够正确的映射到相应的目录
-        String basePath = "file:/root/project/BlogBackEnd4U/BlogBackEnd/target/staticFiles/";
+        String basePath = "file:/root/project/BlogBackEnd4U/staticFiles/";
         registry.addResourceHandler("/staticFiles/**").addResourceLocations(basePath);
     }
 
