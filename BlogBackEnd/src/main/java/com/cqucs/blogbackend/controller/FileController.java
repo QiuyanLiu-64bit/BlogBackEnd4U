@@ -94,7 +94,8 @@ public class FileController {
     @RequestMapping("/download")
     public OperateResult fileDownLoad(HttpServletResponse response, @RequestParam("fileName") String fileName){
         //76843d45-94c2-481b-b88c-ba2630664f66.jpg
-        //http://localhost:8888/file/download?fileName=76843d45-94c2-481b-b88c-ba2630664f66.jpg
+        //win:http://localhost:8888/file/download?fileName=10c331f1-8629-4089-9606-7fce3d79907a.png
+        //linux:http://47.108.204.33:8888/file/download?fileName=10c331f1-8629-4089-9606-7fce3d79907a.png
         /*System.out.println(rootPath +'\\'+"staticFiles"+'\\'+ fileName);*/  //winwdows为\\
         File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/
         if(!file.exists()){
