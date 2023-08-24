@@ -69,7 +69,7 @@ public class FileController {
             file.transferTo(dest);
             // 返回相对路径
             /*return new OperateResult(200, "上传成功",  rootPath + "/staticFiles/" + fileName);*/
-            return new OperateResult(200, "上传成功",  "/root/project/BlogBackEnd4U/staticFiles/" + fileName);
+            return new OperateResult(200, "上传成功",  "http://47.108.204.33:8888/staticFiles/" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
