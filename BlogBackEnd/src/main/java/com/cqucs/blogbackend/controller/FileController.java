@@ -67,7 +67,7 @@ public class FileController {
             // 将上传的文件保存到目标文件中
             file.transferTo(dest);
             // 返回相对路径
-            return new OperateResult(200, "上传成功",  rootPath + "\\StaticFiles\\" + fileName);
+            return new OperateResult(200, "上传成功",  rootPath + "/StaticFiles/" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
@@ -92,13 +92,13 @@ public class FileController {
      * @功能描述 下载文件:
      */
     @RequestMapping("/download")
-    public String fileDownLoad(HttpServletResponse response, @RequestParam("fileName") String fileName){
+    public OperateResult fileDownLoad(HttpServletResponse response, @RequestParam("fileName") String fileName){
         //76843d45-94c2-481b-b88c-ba2630664f66.jpg
         //http://localhost:8888/file/download?fileName=76843d45-94c2-481b-b88c-ba2630664f66.jpg
         /*System.out.println(rootPath +'\\'+"staticFiles"+'\\'+ fileName);*/  //winwdows为\\
         File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/
         if(!file.exists()){
-            return "下载文件不存在";
+            return new OperateResult(500, "下载文件不存在",  rootPath + "/StaticFiles/" + fileName);
         }
         response.reset();
         response.setContentType("application/octet-stream");
@@ -116,8 +116,8 @@ public class FileController {
             }
         } catch (IOException e) {
             log.error("{}",e);
-            return "下载失败";
+            return new OperateResult(500, "下载失败",  null);
         }
-        return "下载成功";
+        return new OperateResult(200, "下载成功",  null);
     }
 }
