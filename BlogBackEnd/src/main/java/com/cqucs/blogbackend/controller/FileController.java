@@ -67,7 +67,7 @@ public class FileController {
             // 将上传的文件保存到目标文件中
             file.transferTo(dest);
             // 返回相对路径
-            return new OperateResult(200, "上传成功",  rootPath + "/StaticFiles/" + fileName);
+            return new OperateResult(200, "上传成功",  rootPath + "/staticFiles/" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
@@ -98,7 +98,7 @@ public class FileController {
         /*System.out.println(rootPath +'\\'+"staticFiles"+'\\'+ fileName);*/  //winwdows为\\
         File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/
         if(!file.exists()){
-            return new OperateResult(500, "下载文件不存在",  rootPath + "/StaticFiles/" + fileName);
+            return new OperateResult(500, "下载文件不存在",  rootPath + "/staticFiles/" + fileName);
         }
         response.reset();
         response.setContentType("application/octet-stream");
