@@ -57,7 +57,8 @@ public class FileController {
             // 生成新的文件名
             fileName = UUID.randomUUID() + suffixName;
             // 创建保存文件的目录
-            File dir = new File(rootPath + "/staticFiles");
+            /*File dir = new File(rootPath + "/staticFiles");*/
+            File dir = new File("/root/project/BlogBackEnd4U/staticFiles/");
             // 如果目录不存在，则创建
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -67,7 +68,8 @@ public class FileController {
             // 将上传的文件保存到目标文件中
             file.transferTo(dest);
             // 返回相对路径
-            return new OperateResult(200, "上传成功",  rootPath + "/staticFiles/" + fileName);
+            /*return new OperateResult(200, "上传成功",  rootPath + "/staticFiles/" + fileName);*/
+            return new OperateResult(200, "上传成功",  "/root/project/BlogBackEnd4U/staticFiles/" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new OperateResult(500, "上传失败", null);
@@ -97,9 +99,11 @@ public class FileController {
         //win:http://localhost:8888/file/download?fileName=10c331f1-8629-4089-9606-7fce3d79907a.png
         //linux:http://47.108.204.33:8888/file/download?fileName=10c331f1-8629-4089-9606-7fce3d79907a.png
         /*System.out.println(rootPath +'\\'+"staticFiles"+'\\'+ fileName);*/  //winwdows为\\
-        File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/
+        /*File file = new File(rootPath +'/'+"staticFiles"+'/'+ fileName);//linux为/*/
+        File file = new File("/root/project/BlogBackEnd4U/staticFiles/"+ fileName);//linux为/
         if(!file.exists()){
-            return new OperateResult(500, "下载文件不存在",  rootPath + "/staticFiles/" + fileName);
+            /*return new OperateResult(500, "下载文件不存在",  rootPath + "/staticFiles/" + fileName);*/
+            return new OperateResult(500, "下载文件不存在",  "/root/project/BlogBackEnd4U/staticFiles/" + fileName);
         }
         response.reset();
         response.setContentType("application/octet-stream");
