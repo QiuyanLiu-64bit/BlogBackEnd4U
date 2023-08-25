@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-cn-uax3cv8az000yy5o.rwlb.cn-chengdu.rds.aliyuncs.com:3306/blog_proj?serverTimezone=GMT%2B8&useSSL=true
-    username: blog_proj
-    password: CQU_BlogProj0820
+    url: jdbc:mysql://rm-cn-uax3cv8az000yy5o.rwlb.cn-chengdu.rds.aliyuncs.com:3306/xxxxxxxx?serverTimezone=GMT%2B8&useSSL=true
+    username: xxxxxxxxx
+    password: xxxxxxxxx
 #  redis:
 #    host: 47.94.128.215
 #    port: 8379
@@ -12,7 +12,7 @@ spring:
     # 发送者邮箱
     username: cqucsblogtest@163.com
     #申请到的授权码
-    password: PFJAEWRTILVOFXFG
+    password: xxxxxxxxxx
     # 配置 SMTP 服务器地址
     host: smtp.163.com
     # 端口号465或587
